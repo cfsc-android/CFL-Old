@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/title_backgroud"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_layout" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:text="请保证光线充足，正面拍摄，睁眼"
+        android:textColor="@color/white"
+        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.xiandao.android.view.CameraPreview
+            android:id="@+id/cp_face_collection_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <ImageView
+            android:id="@+id/iv_face_collection_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/y_px_340"
+            android:scaleType="fitCenter"
+            android:src="@drawable/bg_face_collection_photo"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y_px_300"
+            android:layout_gravity="bottom"
+            android:background="@color/title_backgroud"
+            >
+            <ImageButton
+                android:id="@+id/btn_take_photo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_take_photo"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_take_photo"/>
+            <ImageButton
+                android:id="@+id/btn_take_photo_cancel"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_take_photo"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_take_photo_cancel"/>
+            <ImageButton
+                android:id="@+id/btn_take_photo_sure"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_take_photo"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_take_photo_sure" />
+        </RelativeLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

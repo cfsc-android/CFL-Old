@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor_alertview_alert_start"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="车辆选择:"/>
+
+        <TextView
+            android:id="@+id/tv_car_code_select"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:drawableRight="@drawable/icon_spinner_drapdown"/>
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/ll_car_list"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="10dp"-->
+            <!--android:orientation="horizontal">-->
+            <!--<TextView-->
+                <!--android:id="@+id/tv_car_code_select"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:textColor="@color/style_divider_color"/>-->
+            <!--<ImageView-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_width="10dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@drawable/btn_public_more"/>-->
+        <!--</LinearLayout>-->
+
+        <!--<com.xiandao.android.view.MySpiner-->
+            <!--android:id="@+id/ms_car_list"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_weight="1" />-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_car_lock_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:layout_marginTop="5dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="车锁状态："/>
+
+        <TextView
+            android:id="@+id/tv_car_lock_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:drawablePadding="@dimen/x_px_10"
+            android:textColor="@color/car_lock_theme"/>
+        <Switch
+            android:id="@+id/s_car_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:thumb="@drawable/thumb"
+            android:track="@drawable/track"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_car_lock_record"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="出入记录"
+            android:gravity="center"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"/>
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/ptrlv_car_record_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="@color/bg_color"
+            android:dividerHeight="1dp"
+            android:scrollbars="none" />
+    </LinearLayout>
+
+
+</LinearLayout>

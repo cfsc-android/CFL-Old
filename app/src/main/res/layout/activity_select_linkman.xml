@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_layout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.xiandao.android.view.NoScrollListView
+                android:id="@+id/nslv_select_linkman"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></com.xiandao.android.view.NoScrollListView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_create_linkman"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y_px_70"
+                    android:background="@drawable/btn_round_white"
+                    android:gravity="center"
+                    android:text="新建联系人"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_select_linkman_from_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y_px_70"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_round_white"
+                    android:gravity="center"
+                    android:text="从电话簿中选择"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btn_select_linkman_ok"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_round_blue"
+                    android:text="确认"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

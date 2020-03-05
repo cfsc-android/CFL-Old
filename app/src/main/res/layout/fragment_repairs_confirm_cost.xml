@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/user_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/iv_repairs_user_hear_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@null"
+                    android:src="@mipmap/moren_tx_xiao" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/iv_repairs_user_hear_image"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_repairs_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+
+                    <TextView
+                        android:id="@+id/tv_repairs_at_property"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@mipmap/tsxq2_icon_dz"
+                        android:drawablePadding="3dp"
+                        android:text=""
+                        android:textColor="@color/blue_text_color" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_repairs_user_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/btn_public_phone"
+                    android:contentDescription="@null" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_repairs_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="房屋漏水"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/tv_work_order_detail_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="地址："
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_repairs_des"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/tv_repairs_date_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/gv_repairs_detail_images"
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:horizontalSpacing="3dp"
+                android:numColumns="3"
+                android:padding="10dp"
+                android:scrollbars="none"
+                android:verticalSpacing="5dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="现场情况"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_repairs_screen_des"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/tv_repairs_screen_date_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/gv_repairs_detail_screen_images"
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:horizontalSpacing="3dp"
+                android:numColumns="3"
+                android:padding="10dp"
+                android:scrollbars="none"
+                android:verticalSpacing="5dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="人工费用：" />
+
+                    <TextView
+                        android:id="@+id/tv_dispose_person_cost"
+                        android:layout_width="@dimen/x_px_200"
+                        android:layout_height="35dp"
+                        android:background="@drawable/btn_round_white"
+                        android:gravity="center_vertical"
+                        android:inputType="numberDecimal"
+                        android:lines="1"
+                        android:padding="5dp"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="元" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="材料费用：" />
+
+                    <TextView
+                        android:id="@+id/tv_dispose_material_cost"
+                        android:layout_width="@dimen/x_px_200"
+                        android:layout_height="35dp"
+                        android:background="@drawable/btn_round_white"
+                        android:gravity="center_vertical"
+                        android:inputType="numberDecimal"
+                        android:lines="1"
+                        android:padding="5dp"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="元" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="共计费用：" />
+
+                    <TextView
+                        android:id="@+id/tv_dispose_total_cost"
+                        android:layout_width="@dimen/x_px_200"
+                        android:layout_height="35dp"
+                        android:background="@drawable/btn_round_white"
+                        android:gravity="center_vertical"
+                        android:inputType="numberDecimal"
+                        android:lines="1"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="元" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="报修类型：" />
+
+                    <TextView
+                        android:id="@+id/tv_repairs_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/blue_text_color" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="处  理  人：" />
+
+                    <TextView
+                        android:id="@+id/tv_dispose_person"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/blue_text_color" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="处理状态：" />
+
+                    <TextView
+                        android:id="@+id/tv_repairs_dispose_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/blue_text_color" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_refuse_or_receiving"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_work_order_refuse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="70dp"
+                        android:background="@mipmap/xjjd_kuang_hui"
+                        android:text="拒绝费用"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/btn_work_order_receiving"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:background="@drawable/btn_round_blue"
+                        android:text="接受费用"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_comment_or_payment"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/btn_round_blue"
+                    android:text="评价"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

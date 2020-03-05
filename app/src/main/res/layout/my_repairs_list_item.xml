@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y_px_120"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+
+    <ImageView
+        android:id="@+id/iv_my_repairs_list_url"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_margin="5dp"
+        android:src="@mipmap/wdbx_icon_bs" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_repairs_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="水管维修出现质量问题的投诉"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/tv_repairs_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="编号："
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/tv_repairs_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="地址："
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/tv_repairs_datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017-4-1 00:00:00"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_repairs_status"
+        android:layout_width="70dip"
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dip"
+        android:gravity="center"
+        android:text="处理中"
+        android:textColor="#007cc2"
+        android:textSize="14sp" />
+
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dip"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:background="#eeeeee" />-->
+</LinearLayout>

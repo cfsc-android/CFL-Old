@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor_alertview_alert_start"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_layout" />
+
+    <com.xiandao.android.view.NoScrollViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></com.xiandao.android.view.NoScrollViewPager>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioGroup
+            android:id="@+id/rg_main"
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:checkedButton="@+id/rb"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:button="@null"
+                android:drawablePadding="@dimen/x_px_10"
+                android:drawableTop="@drawable/second_hand_menu_icon_market"
+                android:gravity="center_horizontal"
+                android:text="市场"
+                android:textColor="@drawable/second_hand_menu_text_color"
+                android:textSize="@dimen/x_px_22" />
+
+            <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:button="@null"
+                android:drawablePadding="@dimen/x_px_10"
+                android:drawableTop="@drawable/second_hand_menu_icon_mine"
+                android:gravity="center_horizontal"
+                android:text="我的"
+                android:textColor="@drawable/second_hand_menu_text_color"
+                android:textSize="@dimen/x_px_22" />
+
+        </RadioGroup>
+        <ImageView
+            android:id="@+id/iv_second_hand_add"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/second_hand_publish_add"
+            />
+    </FrameLayout>
+</LinearLayout>

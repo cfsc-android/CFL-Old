@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <include layout="@layout/owner_detail" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_complain_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:text="水管质量差"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/tv_complain_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="待确认解决方案"
+                    android:textColor="@color/main_menu_text_color_true"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_complain_des"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/tv_complain_date_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/gv_complain_detail_images"
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:horizontalSpacing="3dp"
+                android:numColumns="3"
+                android:padding="10dp"
+                android:scrollbars="none"
+                android:verticalSpacing="5dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="现场情况"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_complain_screen_des"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/tv_complain_screen_date_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="" />
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/gv_complain_detail_screen_images"
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:horizontalSpacing="3dp"
+                android:numColumns="3"
+                android:padding="10dp"
+                android:scrollbars="none"
+                android:verticalSpacing="5dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="解决方案："
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/tv_complain_programme_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="选择最新质量最好的水管" />
+
+            <TextView
+                android:id="@+id/tv_complain_programme_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingTop="10dp"
+                android:text="2017-06-07 15:01:11" />
+
+            <LinearLayout
+                android:id="@+id/ll_complain_refuse_or_receiving"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_complain_refuse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="70dp"
+                    android:background="@mipmap/xjjd_kuang_hui"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="拒绝方案"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_complain_receiving"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/btn_round_blue"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="接受方案"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

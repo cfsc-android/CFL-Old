@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/y_px_20"
+    android:paddingRight="@dimen/x_px_15"
+    android:paddingTop="@dimen/y_px_20">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rlv_find"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroud_color"
+    android:orientation="vertical"
+    android:scrollbars="none">
+
+    <include layout="@layout/title_layout" />
+
+    <com.xiandao.android.view.EditTextDelView
+        android:id="@+id/etd_my_receiving_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:drawablePadding="10dp"
+        android:hint="请输入收货地址"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_commit_my_receiving_address"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="@color/title_backgroud"
+        android:padding="8dp"
+        android:text="提  交"
+        android:textColor="@color/white"
+        android:textSize="18dip" />
+
+</LinearLayout>

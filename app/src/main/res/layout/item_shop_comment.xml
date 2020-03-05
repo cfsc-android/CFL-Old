@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_buyer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="买主姓名" />
+
+        <TextView
+            android:id="@+id/tv_shop_comment_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="2018-3-22 14:11:11" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_shop_comment_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="评价内容"
+        android:textColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_shop_comment_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="评价等级：好评" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="评价星级：" />
+
+            <ImageView
+                android:id="@+id/iv_star_1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:src="@mipmap/star_yellow" />
+
+            <ImageView
+                android:id="@+id/iv_star_2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:src="@mipmap/star_yellow" />
+
+            <ImageView
+                android:id="@+id/iv_star_3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:src="@mipmap/star_yellow" />
+
+            <ImageView
+                android:id="@+id/iv_star_4"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:src="@mipmap/star_yellow" />
+
+            <ImageView
+                android:id="@+id/iv_star_5"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="2dp"
+                android:src="@mipmap/star_yellow" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

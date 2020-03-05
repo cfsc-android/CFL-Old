@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!--<ProgressBar-->
+    <!--android:id="@+id/progressBar1"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+    <com.devspark.progressfragment.ProgressWheel xmlns:ProgressWheel="http://schemas.android.com/tools"
+        android:id="@+id/progressBar1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        ProgressWheel:pwBarColor="#448a2d98"
+        ProgressWheel:pwBarLength="40dp"
+        ProgressWheel:pwBarWidth="15dp"
+        ProgressWheel:pwRimColor="#448a2d98"
+        ProgressWheel:pwRimWidth="15dp"
+        ProgressWheel:pwSpinSpeed="3dp"
+        ProgressWheel:pwTextColor="#448a2d98"
+        ProgressWheel:pwTextSize="14sp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="正在加载中..."
+        android:textColor="@color/transparent" />
+
+</LinearLayout>

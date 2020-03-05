@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/ptrlv_my_order"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:divider="@color/bg_color"
+        android:dividerHeight="1dp"
+        android:scrollbars="none" />
+
+    <LinearLayout
+        android:id="@+id/ll_no_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/no_order" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="您还没有相关订单"
+            android:textSize="18sp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.xiandao.android">
+
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Required -->
+    <permission
+        android:name="com.xiandao.android.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" /> <!-- Required  一些系统要求的权限，如访问网络等 -->
+    <uses-permission android:name="com.xiandao.android.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Optional for location -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" /> <!-- // 需要开启权限 -->
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission
+        android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.CLEAR_APP_CACHE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
+    <application
+        android:name=".AndroidApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".ui.activity.UnLockListActivity"></activity>
+        <activity android:name=".ui.activity.WorkflowStepActivity" />
+        <activity
+            android:name=".ui.activity.LaunchActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.imagepreview.ui.PreviewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.UnLock"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RepairsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ComplainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.NoticeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.NoticeResourcesListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.NoticeDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ComplainDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SetMineActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SelectLinkmanActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SelectCommonAddressActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ShaiXuanActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MyComplainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MyRepairsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.LifePayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.LifePayShaiXuanActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.LifePayDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CreateLinkmanActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CreateCommonAddressActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RepairsDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RepairsConfirmCostActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RepairsCommentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ComplainConfirmProgrammeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ComplainConfirmReformActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ComplainConfirmResultActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ComplainToCommentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ComplainCommentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ComplainFinishActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.NetworkErrorActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ShowUrlPhotoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ShowBitmapPhotoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ShowAddImageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.NeighborhoodActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.PostActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" /> <!-- 商店 -->
+        <activity
+            android:name=".ui.activity.shop.StoreListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.ShopMainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.GoodsDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.MyReceivingAddressActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.OrderListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.CommitOrderListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.MyOrderActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.OrderDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.GoodsListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.ShopCommentListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.shop.ShopPayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".utils.zxing.activity.CaptureActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.WaitingForDevelopmentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" /> <!-- 友盟 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent101569547" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- Rich push 核心功能 since 2.0.6 -->
+        <activity
+            android:name="cn.jpush.android.ui.PopWinActivity"
+            android:exported="false"
+            android:theme="@style/MyDialogStyle" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="wx4b10935662bcf67c" />
+            </intent-filter>
+        </activity> <!-- Required SDK核心功能 -->
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </activity> <!-- Required SDK 核心功能 -->
+        <!-- 可配置android:process参数将PushService放在其他进程中 -->
+        <service
+            android:name="cn.jpush.android.service.PushService"
+            android:exported="false"
+            android:process=":mult">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER" />
+                <action android:name="cn.jpush.android.intent.REPORT" />
+                <action android:name="cn.jpush.android.intent.PushService" />
+                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+            </intent-filter>
+        </service> <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
+        <service
+            android:name="cn.jpush.android.service.DaemonService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService" />
+
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </service> <!-- Required SDK核心功能 -->
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" /> <!-- Required  显示通知栏 -->
+                <category android:name="${applicationId}" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver> <!-- Required SDK核心功能 -->
+        <receiver
+            android:name="cn.jpush.android.service.AlarmReceiver"
+            android:exported="false" /> <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <receiver
+            android:name=".utils.MyReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver> <!-- Required  . Enable it you can get statistics data with channel -->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="9d5199c1d83613fa2ccaffb8" /> <!-- </>值来自开发者平台取得的AppKey:acf90a111543a633bc15bf1a -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="name,authorities,exported,grantUriPermissions">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"
+                tools:replace="name,resource" />
+        </provider> <!-- 必选 -->
+        <meta-data
+            android:name="PGYER_APPID"
+            android:value="a1108526a9eff05f6c9fb96412dd4f22" />
+
+        <activity
+            android:name="com.pgyersdk.feedback.FeedbackActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.FindDetailsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.ReleaseThemeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.CarLock"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.ParkingPaymentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.FaceCollectionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.VisitorActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.VideoCallActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.NewVisitorActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.VisitorQrCodeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.VideoCallPreviewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.VideoCallDialActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.FaceCollectionPotoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.PaymentTestActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.IpSettingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.H5TestActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.ExpressSearchActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.NewsInfoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.PersonalInformationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.PersonalNickNameActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.SetttingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.SettingDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.LifePaymentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.CarManageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.CarManageAddActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.ShowLargeImageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.JoinInActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.SecondHandActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.SecondHandDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.SecondHandIMActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity
+            android:name=".ui.activity.SecondHandPublishActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard"
+            android:screenOrientation="nosensor" />
+        <activity android:name=".ui.activity.CommentActivity" />
+        <activity android:name=".ui.activity.CommentDetailActivity" />
+        <activity android:name=".ui.activity.FaceCollectionListActivity" />
+        <activity android:name=".ui.activity.CarManageEditActivity" />
+        <activity android:name=".ui.activity.PersonalTelBindActivity" />
+        <activity android:name=".ui.activity.H5LinkActivity" />
+        <activity android:name=".ui.activity.ProjectListActivity" />
+        <activity android:name=".ui.activity.ProjectProgressActivity" />
+        <activity android:name=".ui.activity.SettingAboutActivity" />
+        <activity android:name=".ui.activity.RegisterActivity" />
+    </application>
+
+</manifest>

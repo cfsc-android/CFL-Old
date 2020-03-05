@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+
+    <ImageView
+        android:id="@+id/iv_my_complain_list"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_margin="5dp"
+        android:src="@mipmap/wdbx_icon_bs" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_my_complain_list_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:text="水管维修出现质量问题的投诉"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_my_complain_list_datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017-4-1 00:00:00"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_my_complain_list_status"
+        android:layout_width="70dip"
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dip"
+        android:gravity="center"
+        android:text="处理中"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+</LinearLayout>

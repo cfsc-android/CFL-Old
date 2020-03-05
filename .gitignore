@@ -1,0 +1,11 @@
+*.iml
+.gradle/
+local.properties
+.idea/
+app/release/
+app/build/
+android-Pulltorefresh-Library/build/
+android-ultra-pull-to-refresh-library/build/
+library/build/
+progressfragment/build/
+projectFilesBackup/

@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor_alertview_alert_start"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/i_title_layout"
+        layout="@layout/title_layout" />
+
+    <RelativeLayout
+        android:id="@+id/rl_playView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+
+        <SurfaceView
+            android:id="@+id/sv_surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="false"
+            android:background="@android:color/transparent" />
+
+        <TextView
+            android:id="@+id/tv_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="0%"
+            android:textColor="#ffffff" />
+
+        <include
+            android:id="@+id/controlBar"
+            layout="@layout/video_ezplay_control"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>

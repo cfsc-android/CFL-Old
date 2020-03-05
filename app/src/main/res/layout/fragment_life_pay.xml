@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ptrlv_life_pay_list"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_above="@+id/tv_load_all"
+    android:divider="@color/bg_color"
+    android:dividerHeight="1dp"
+    android:scrollbars="none" />
+

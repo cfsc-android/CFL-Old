@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_layout" />
+
+    <ImageView
+        android:id="@+id/iv_select_photo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/moren_tx_hui" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="选择头像"
+        android:textColor="@color/title_backgroud" />
+
+    <EditText
+        android:id="@+id/et_nick_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/btn_round_white"
+        android:hint="昵称"
+        android:paddingLeft="10dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_common_address"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="15dp"
+        android:background="@mipmap/screen_input"
+        android:drawableRight="@mipmap/tousu_btn_down"
+        android:gravity="center_vertical"
+        android:hint="联系地址"
+        android:paddingLeft="10dp"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_select_linkman"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="15dp"
+        android:background="@mipmap/screen_input"
+        android:drawableRight="@mipmap/tousu_btn_down"
+        android:gravity="center_vertical"
+        android:hint="常用联系人"
+        android:paddingLeft="10dp"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btn_setmine_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/btn_round_blue"
+        android:text="确认"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/btn_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/btn_round_blue"
+        android:text="注销当前用户"
+        android:textColor="@color/white" />
+
+</LinearLayout>

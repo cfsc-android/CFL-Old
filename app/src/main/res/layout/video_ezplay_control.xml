@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/realplay_control_rl"
+    android:layout_width="match_parent"
+    android:layout_height="38dp"
+    android:background="#7f222222"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:splitMotionEvents="false">
+
+    <!-- 播放按钮 -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:duplicateParentState="true">
+
+        <ImageView
+            android:id="@+id/realplay_stop_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/play_stop_selector" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:duplicateParentState="true">
+
+        <ImageView
+            android:id="@+id/realplay_sound_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ezopen_vertical_preview_sound_selector"
+            android:clickable="true" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:duplicateParentState="true">
+
+        <!--<com.videogo.widget.CheckTextButton-->
+            <!--android:id="@+id/fullscreen_button"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="30dp"-->
+            <!--android:background="@drawable/fullscreen_button_selector" />-->
+
+    </RelativeLayout>
+
+</LinearLayout>

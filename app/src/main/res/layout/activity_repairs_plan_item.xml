@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/ll_center"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/left_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017-10-01 10:44"
+            android:textColor="#ccc"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/left_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/tsxq_dhk_left"
+            android:gravity="center_vertical|right"
+            android:paddingRight="10dp"
+            android:text="已核实"
+            android:textColor="#fff"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <View
+            android:id="@+id/up_line"
+            android:layout_width="1dp"
+            android:layout_height="35dp"
+            android:background="@mipmap/tsxq_xuxian" />
+
+        <ImageView
+            android:id="@+id/circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
+            android:src="@mipmap/tsxq_dian" />
+
+        <View
+            android:id="@+id/down_line"
+            android:layout_width="1dp"
+            android:layout_height="35dp"
+            android:background="@mipmap/tsxq_xuxian" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/ll_center"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/right_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017-10-01 10:44"
+            android:textColor="#ccc"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/right_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/tsxq_dhk_right"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="10dp"
+            android:text="已核实"
+            android:textColor="#fff"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ADTextView">
+        <attr name="ad_text_view_speed" format="integer"/>
+        <attr name="ad_text_view_interval" format="integer"/>
+        <attr name="ad_text_front_color" format="color"/>
+        <attr name="ad_text_content_color" format="color"/>
+        <attr name="ad_text_front_size" format="integer"/>
+        <attr name="ad_text_content_size" format="integer"/>
+        <attr name="ad_text_content_padding" format="integer"/>
+        <attr name="ad_text_padding_left" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="EasyIndicator">
+        <!--指示器(整个Tab）的宽度，默认-1(MATCH_PARENT)为填充满-->
+        <attr name="indicator_width" format="dimension" />
+        <!--指示器的高度，默认45dp-->
+        <attr name="indicator_height" format="dimension" />
+
+        <!--指示器文字的大小，默认14sp-->
+        <attr name="indicator_textSize" format="dimension" />
+        <!--指示器选中时文字的大小，默认14sp-->
+        <attr name="indicator_select_textSize" format="dimension" />
+        <!--指示器选中时的背景颜色，默认R.attr.colorAccent-->
+        <attr name="indicator_selected_color" format="color" />
+        <!--指示器未选中时的背景颜色，默认黑色-->
+        <attr name="indicator_normal_color" format="color" />
+
+        <!--是否显示底部指示器，默认true-->
+        <attr name="indicator_line_show" format="boolean" />
+        <!--指示器底部的高度，默认3-->
+        <attr name="indicator_line_height" format="dimension" />
+        <!--指示器指示线的颜色，默认R.attr.colorAccent-->
+        <attr name="indicator_line_color" format="color" />
+
+        <!--指示器底部指示线的颜色，默认R.attr.xui_config_color_separator_dark-->
+        <attr name="indicator_bottom_line_color" format="color" />
+        <!--指示器底部指示线的高度，默认0-->
+        <attr name="indicator_bottom_line_height" format="dimension" />
+
+        <!--指示器垂直分割线的宽度，默认0-->
+        <attr name="indicator_vertical_line_w" format="dimension" />
+        <!--指示器垂直分割线的高度，默认0-->
+        <attr name="indicator_vertical_line_h" format="dimension" />
+        <!--指示器垂直分割线的颜色，默认R.attr.xui_config_color_separator_dark-->
+        <attr name="indicator_vertical_line_color" format="color" />
+    </declare-styleable>
+    <attr name="EasyIndicatorStyle" format="reference" />
+
+    <!--IconImageView-->
+    <declare-styleable name="IconImageView">
+        <!--图标的资源-->
+        <attr name="iiv_icon" format="reference" />
+        <!--图标缩放的比例, 默认是0.5-->
+        <attr name="iiv_icon_scale" format="float" />
+        <!--图标是否显示, 默认是true-->
+        <attr name="iiv_is_show" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="BezierBannerView">
+        <attr name="bbv_selectedColor" format="color" />
+        <attr name="bbv_unSelectedColor" format="color" />
+        <attr name="bbv_selectedRadius" format="dimension" />
+        <attr name="bbv_unSelectedRadius" format="dimension" />
+        <attr name="bbv_spacing" format="dimension" />
+    </declare-styleable>
+</resources>

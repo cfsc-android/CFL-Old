@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_gongdan_detail_finish"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:visibility="visible">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/work_order_detail" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_work_order_ago_dispose_screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="现场情况"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_work_order_ago_dispose_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_ago_dispose_datetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="6dp"
+                    android:textSize="10sp" />
+
+                <GridView
+                    android:id="@+id/gv_work_order_ago_dispose_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:horizontalSpacing="3dp"
+                    android:numColumns="3"
+                    android:padding="10dp"
+                    android:scrollbars="none"
+                    android:verticalSpacing="5dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_work_order_after_dispose_screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="现场情况"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_work_order_after_dispose_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_work_order_after_dispose_datetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="6dp"
+                    android:textSize="10sp" />
+
+                <GridView
+                    android:id="@+id/gv_work_order_after_dispose_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:horizontalSpacing="3dp"
+                    android:numColumns="3"
+                    android:padding="10dp"
+                    android:scrollbars="none"
+                    android:verticalSpacing="5dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_work_order_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="评价：" />
+
+                <ImageView
+                    android:id="@+id/iv_star_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/little_star" />
+
+                <ImageView
+                    android:id="@+id/iv_star_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/little_star" />
+
+                <ImageView
+                    android:id="@+id/iv_star_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/little_star" />
+
+                <ImageView
+                    android:id="@+id/iv_star_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/little_star" />
+
+                <ImageView
+                    android:id="@+id/iv_star_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:src="@mipmap/little_star" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_work_order_comment_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
