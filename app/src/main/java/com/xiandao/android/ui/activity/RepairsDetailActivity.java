@@ -2,6 +2,7 @@ package com.xiandao.android.ui.activity;
 
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.andview.refreshview.utils.LogUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.xiandao.android.R;
+import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.smart.BaseEntity;
 import com.xiandao.android.entity.smart.OrderDetailsEntity;
 import com.xiandao.android.entity.smart.OrderEntity;
@@ -30,11 +32,15 @@ import com.xiandao.android.http.MyCallBack;
 import com.xiandao.android.http.XUtils;
 import com.xiandao.android.ui.BaseActivity;
 import com.xiandao.android.ui.fragment.WorkflowActionFragment;
+import com.xiandao.android.utils.FileManagement;
 import com.xiandao.android.view.NoUnderlineSpan;
 import com.xiandao.android.view.imagepreview.ImagePreviewListAdapter;
 import com.xiandao.android.view.imagepreview.ImageViewInfo;
 import com.xiandao.android.view.imagepreview.PreviewBuilder;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.Event;
 import org.xutils.event.annotation.ViewInject;
@@ -90,6 +96,8 @@ public class RepairsDetailActivity extends BaseActivity {
     private String orderId;
     private List<WorkflowOrderEntity> data=new ArrayList<>();
     private NoUnderlineSpan mNoUnderlineSpan;
+    private FragmentManager fragmentManager;
+    private WorkflowActionFragment workflowActionFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,10 +105,11 @@ public class RepairsDetailActivity extends BaseActivity {
         toolbar_btn_action.setVisibility(View.GONE);
         toolbar_tv_action.setText("进度");
         toolbar_tv_action.setVisibility(View.VISIBLE);
-
+        fragmentManager=getSupportFragmentManager();
         orderId=getIntent().getExtras().getString("order_id");
         getData();
         mNoUnderlineSpan = new NoUnderlineSpan();
+        EventBus.getDefault().register(this);
     }
 
     @Event({R.id.toolbar_btn_back,R.id.toolbar_tv_action})
@@ -117,6 +126,21 @@ public class RepairsDetailActivity extends BaseActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventBusMessage message){
+        if("OrderDetailRefresh".equals(message.getMessage())){
+            getData();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+
+
     private void getData(){
         startProgressDialog("");
         XUtils.Get(BASE_URL+WORKORDER+"work/order/api/user/findOrderById/"+orderId,null,new MyCallBack<String>(){
@@ -127,9 +151,14 @@ public class RepairsDetailActivity extends BaseActivity {
                 BaseEntity<OrderDetailsEntity> baseEntity= JsonParse.parse(result, OrderDetailsEntity.class);
                 if(baseEntity.isSuccess()){
                     initView(baseEntity.getResult().getWorkOrder());
-                    initWorkFlow(baseEntity.getResult().getWorkOrderDetailsVo());
-                    initAction(baseEntity.getResult().getWorkOrderDetailsVo().get(baseEntity.getResult().getWorkOrderDetailsVo().size()-1).getNodeName());
-                    data.addAll(baseEntity.getResult().getWorkOrderDetailsVo());
+                    List<WorkflowOrderEntity> workflowList=baseEntity.getResult().getWorkOrderDetailsVo();
+                    WorkflowOrderEntity lastWorkflow=workflowList.get(workflowList.size()-1);
+                    if(lastWorkflow.getOperationInfos()!=null&&lastWorkflow.getOperationInfos().size()>0){
+                        initAction(lastWorkflow);
+                        workflowList.remove(workflowList.size()-1);
+                    }
+                    initWorkFlow(workflowList);
+                    data.addAll(workflowList);
                 }else{
                     showToast(baseEntity.getMessage());
                 }
@@ -190,36 +219,37 @@ public class RepairsDetailActivity extends BaseActivity {
             item_workflow_time.setText(item.getCreateTime());
             final List<ImageViewInfo> data=new ArrayList<>();
             List<ResourceEntity> picData=item.getResourceValues();
-            if(picData!=null){
+            if(picData!=null&&picData.size()>0){
                 for (int j = 0; j < picData.size(); j++) {
                     data.add(new ImageViewInfo(picData.get(j).getUrl()));
                 }
-            }
-            final ImagePreviewListAdapter imageAdapter=new ImagePreviewListAdapter(this,R.layout.item_workflow_image_perview_list,data);
-            final GridLayoutManager mGridLayoutManager = new GridLayoutManager(this,3);
-            item_workflow_pic.setLayoutManager(mGridLayoutManager);
-            item_workflow_pic.setAdapter(imageAdapter);
-            item_workflow_pic.addOnItemTouchListener(new com.chad.library.adapter.base.listener.OnItemClickListener() {
-                @Override
-                public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    for (int k = mGridLayoutManager.findFirstVisibleItemPosition(); k < adapter.getItemCount(); k++) {
-                        View itemView = mGridLayoutManager.findViewByPosition(k);
-                        Rect bounds = new Rect();
-                        if (itemView != null) {
-                            ImageView imageView = itemView.findViewById(R.id.iiv_item_image_preview);
-                            imageView.getGlobalVisibleRect(bounds);
+                final ImagePreviewListAdapter imageAdapter=new ImagePreviewListAdapter(this,R.layout.item_workflow_image_perview_list,data);
+                final GridLayoutManager mGridLayoutManager = new GridLayoutManager(this,4);
+                item_workflow_pic.setLayoutManager(mGridLayoutManager);
+                item_workflow_pic.setAdapter(imageAdapter);
+                item_workflow_pic.addOnItemTouchListener(new com.chad.library.adapter.base.listener.OnItemClickListener() {
+                    @Override
+                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        for (int k = mGridLayoutManager.findFirstVisibleItemPosition(); k < adapter.getItemCount(); k++) {
+                            View itemView = mGridLayoutManager.findViewByPosition(k);
+                            Rect bounds = new Rect();
+                            if (itemView != null) {
+                                ImageView imageView = itemView.findViewById(R.id.iiv_item_image_preview);
+                                imageView.getGlobalVisibleRect(bounds);
+                            }
+                            //计算返回的边界
+                            imageAdapter.getItem(k).setBounds(bounds);
                         }
-                        //计算返回的边界
-                        imageAdapter.getItem(k).setBounds(bounds);
+                        PreviewBuilder.from(RepairsDetailActivity.this)
+                                .setImgs(data)
+                                .setCurrentIndex(position)
+                                .setSingleFling(true)
+                                .setType(PreviewBuilder.IndicatorType.Number)
+                                .start();
                     }
-                    PreviewBuilder.from(RepairsDetailActivity.this)
-                            .setImgs(data)
-                            .setCurrentIndex(position)
-                            .setSingleFling(true)
-                            .setType(PreviewBuilder.IndicatorType.Number)
-                            .start();
-                }
-            });
+                });
+            }
+
             order_detail_workflow_ll.addView(v);
         }
     }
@@ -256,8 +286,25 @@ public class RepairsDetailActivity extends BaseActivity {
         order_detail_remark_time.setText(workOrder.getCreateTime());
     }
 
-    private void initAction(String action){
-        FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.order_detail_workflow_action_fl,new WorkflowActionFragment().newInstance(action)).commit();
+    private void initAction(WorkflowOrderEntity lastWorkflow){
+        FragmentTransaction transaction=fragmentManager.beginTransaction();
+        if(lastWorkflow.getHandlerId().equals(FileManagement.getUserInfoEntity().getId())) {
+            Bundle bundle = new Bundle();
+            bundle.putString("action", lastWorkflow.getNodeName());
+            bundle.putString("workOrderId", orderId);
+            bundle.putString("operationName", lastWorkflow.getOperation());
+            bundle.putSerializable("operationInfos", (Serializable) lastWorkflow.getOperationInfos());
+            if(workflowActionFragment!=null){
+                workflowActionFragment=new WorkflowActionFragment().newInstance(bundle);
+                transaction.replace(R.id.order_detail_workflow_action_fl,workflowActionFragment).commit();
+            }else{
+                workflowActionFragment=new WorkflowActionFragment().newInstance(bundle);
+                transaction.add(R.id.order_detail_workflow_action_fl,workflowActionFragment).commit();
+            }
+        }else{
+            if(workflowActionFragment!=null){
+                transaction.remove(workflowActionFragment);
+            }
+        }
     }
 }

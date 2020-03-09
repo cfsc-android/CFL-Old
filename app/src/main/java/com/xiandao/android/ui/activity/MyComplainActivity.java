@@ -134,7 +134,7 @@ public class MyComplainActivity extends BaseActivity {
         Map<String,Object> map=new HashMap<>();
         map.put("pageNo",page);
         map.put("pageSize",pageSize);
-        XUtils.PostJson(BASE_URL+WORKORDER+"work/complaintOwner/queryComplainList",map,new MyCallBack<String>(){
+        XUtils.PostJson(BASE_URL+WORKORDER+"work/complaintOwner/getOwnerComplaintList",map,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
                 super.onSuccess(result);

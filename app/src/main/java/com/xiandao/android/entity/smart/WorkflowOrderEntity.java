@@ -42,6 +42,7 @@ public class WorkflowOrderEntity implements Serializable {
     private String shortDesc;
     private String createTime;
     private List<ResourceEntity> resourceValues;
+    private List<OperationInfoEntity> operationInfos;
 
     public String getId() {
         return id;
@@ -153,5 +154,13 @@ public class WorkflowOrderEntity implements Serializable {
 
     public void setResourceValues(List<ResourceEntity> resourceValues) {
         this.resourceValues = resourceValues;
+    }
+
+    public List<OperationInfoEntity> getOperationInfos() {
+        return operationInfos;
+    }
+
+    public void setOperationInfos(List<OperationInfoEntity> operationInfos) {
+        this.operationInfos = operationInfos;
     }
 }

@@ -224,36 +224,37 @@ public class ComplainDetailActivity extends BaseActivity {
             item_workflow_time.setText(item.getCreateTime());
             final List<ImageViewInfo> data=new ArrayList<>();
             List<ResourceEntity> picData=item.getResourceValue();
-            if(picData!=null){
+            if(picData!=null&&picData.size()>0){
                 for (int j = 0; j < picData.size(); j++) {
                     data.add(new ImageViewInfo(picData.get(j).getUrl()));
                 }
-            }
-            final ImagePreviewListAdapter imageAdapter=new ImagePreviewListAdapter(this,R.layout.item_workflow_image_perview_list,data);
-            final GridLayoutManager mGridLayoutManager = new GridLayoutManager(this,3);
-            item_workflow_pic.setLayoutManager(mGridLayoutManager);
-            item_workflow_pic.setAdapter(imageAdapter);
-            item_workflow_pic.addOnItemTouchListener(new com.chad.library.adapter.base.listener.OnItemClickListener() {
-                @Override
-                public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    for (int k = mGridLayoutManager.findFirstVisibleItemPosition(); k < adapter.getItemCount(); k++) {
-                        View itemView = mGridLayoutManager.findViewByPosition(k);
-                        Rect bounds = new Rect();
-                        if (itemView != null) {
-                            ImageView imageView = itemView.findViewById(R.id.iiv_item_image_preview);
-                            imageView.getGlobalVisibleRect(bounds);
+                final ImagePreviewListAdapter imageAdapter=new ImagePreviewListAdapter(this,R.layout.item_workflow_image_perview_list,data);
+                final GridLayoutManager mGridLayoutManager = new GridLayoutManager(this,4);
+                item_workflow_pic.setLayoutManager(mGridLayoutManager);
+                item_workflow_pic.setAdapter(imageAdapter);
+                item_workflow_pic.addOnItemTouchListener(new com.chad.library.adapter.base.listener.OnItemClickListener() {
+                    @Override
+                    public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        for (int k = mGridLayoutManager.findFirstVisibleItemPosition(); k < adapter.getItemCount(); k++) {
+                            View itemView = mGridLayoutManager.findViewByPosition(k);
+                            Rect bounds = new Rect();
+                            if (itemView != null) {
+                                ImageView imageView = itemView.findViewById(R.id.iiv_item_image_preview);
+                                imageView.getGlobalVisibleRect(bounds);
+                            }
+                            //计算返回的边界
+                            imageAdapter.getItem(k).setBounds(bounds);
                         }
-                        //计算返回的边界
-                        imageAdapter.getItem(k).setBounds(bounds);
+                        PreviewBuilder.from(ComplainDetailActivity.this)
+                                .setImgs(data)
+                                .setCurrentIndex(position)
+                                .setSingleFling(true)
+                                .setType(PreviewBuilder.IndicatorType.Number)
+                                .start();
                     }
-                    PreviewBuilder.from(ComplainDetailActivity.this)
-                            .setImgs(data)
-                            .setCurrentIndex(position)
-                            .setSingleFling(true)
-                            .setType(PreviewBuilder.IndicatorType.Number)
-                            .start();
-                }
-            });
+                });
+            }
+
             complain_detail_workflow_ll.addView(v);
         }
 

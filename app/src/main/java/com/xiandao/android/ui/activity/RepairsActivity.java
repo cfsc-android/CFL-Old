@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -30,6 +31,7 @@ import com.xiandao.android.ui.BaseActivity;
 import com.xiandao.android.utils.FileManagement;
 import com.xiandao.android.utils.FilePathUtil;
 import com.xiandao.android.utils.PermissionsUtils;
+import com.xiandao.android.view.WheelDialog;
 import com.xiandao.android.view.imagepreview.ImagePreviewListAdapter;
 import com.xiandao.android.view.imagepreview.ImageViewInfo;
 import com.xiandao.android.view.imagepreview.PreviewBuilder;
@@ -80,6 +82,8 @@ public class RepairsActivity extends BaseActivity {
     private EditText add_order_et_contact;
     @ViewInject(R.id.add_order_et_contact_tel)
     private EditText add_order_et_contact_tel;
+    @ViewInject(R.id.add_order_et_plain_time)
+    private EditText add_order_et_plain_time;
     @ViewInject(R.id.add_order_et_remark)
     private EditText add_order_et_remark;
     @ViewInject(R.id.add_order_rlv_pic)
@@ -101,6 +105,7 @@ public class RepairsActivity extends BaseActivity {
     private int problemValue,projectValue;
     private String resourceKey;
     private MaterialSpinnerAdapter projectDataAdapter;
+    private WheelDialog wheeldialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +128,7 @@ public class RepairsActivity extends BaseActivity {
         });
 
         dataList.add(new ImageViewInfo("plus"));
-        add_order_rlv_pic.setLayoutManager(mGridLayoutManager = new GridLayoutManager(this,3));
+        add_order_rlv_pic.setLayoutManager(mGridLayoutManager = new GridLayoutManager(this,4));
         adapter=new ImagePreviewListAdapter(this, R.layout.item_workflow_image_perview_list,dataList);
         add_order_rlv_pic.setAdapter(adapter);
         add_order_rlv_pic.addOnItemTouchListener(new com.chad.library.adapter.base.listener.OnItemClickListener() {
@@ -155,6 +160,10 @@ public class RepairsActivity extends BaseActivity {
         orderTypeEntityList= FileManagement.getOrderType();
         initProblemSpinner();
         resourceKey= UUID.randomUUID().toString().replaceAll("-","");
+        add_order_et_address.setText(FileManagement.getUserInfoEntity().getAncestor());
+        add_order_et_contact.setText(FileManagement.getUserInfoEntity().getName());
+        add_order_et_contact_tel.setText(FileManagement.getUserInfoEntity().getMobile());
+
     }
 
     private void initProblemSpinner(){
@@ -218,6 +227,26 @@ public class RepairsActivity extends BaseActivity {
         }
     }
 
+    @Event(type = View.OnTouchListener.class,value ={R.id.add_order_et_plain_time})
+    private boolean onTouchEvent(View v, MotionEvent event){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            switch (v.getId()) {
+                case R.id.add_order_et_plain_time:
+                    wheeldialog = new WheelDialog(this, R.style.Dialog_Floating, new WheelDialog.OnDateTimeConfirm() {
+                        @Override
+                        public void returnData(String dateText, String dateValue) {
+                            wheeldialog.cancel();
+                            add_order_et_plain_time.setText(dateText);
+                        }
+                    });
+                    wheeldialog.show();
+                    break;
+            }
+        }
+        return false;
+    }
+
+
     @Event({R.id.toolbar_btn_back, R.id.login_btn_login})
     private void onClickEvent(View v){
         switch (v.getId()){
@@ -256,6 +285,7 @@ public class RepairsActivity extends BaseActivity {
         requestMap.put("householdId","16fa73e5607ee21f4ff5e0842e7b5d4c");
         requestMap.put("linkMan",add_order_et_contact.getText().toString());
         requestMap.put("mobile",add_order_et_contact_tel.getText().toString());
+        requestMap.put("planTime",add_order_et_plain_time.getText().toString()+":00");
         requestMap.put("problemDesc",add_order_et_remark.getText().toString());
         if(dataList.size()>1)
             requestMap.put("resourcekey",resourceKey);

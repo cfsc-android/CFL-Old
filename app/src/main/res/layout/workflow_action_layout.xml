@@ -5,14 +5,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/workflow_action_name"
+    <LinearLayout
+        android:id="@+id/workflow_action_toggle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/text_primary"
-        android:textSize="14sp"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/workflow_action_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:gravity="center"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"/>
+        <ImageView
+            android:id="@+id/workflow_action_toggle_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_action_down"/>
+    </LinearLayout>
+
     <FrameLayout
+        android:id="@+id/workflow_action_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!--客户接受价格-->
@@ -107,16 +122,16 @@
                     android:background="#fff"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="10dp"
-                    app:rsv_cornerRadius="4dp"
+                    app:rsv_cornerRadius="3dp"
                     app:rsv_starMargin="12dp"
                     app:rsv_strokeWidth="2px"
                     app:rsv_strokeColor="#457DD7"
                     app:rsv_starForegroundColor="#DB6958"
                     app:rsv_starBackgroundColor="#E8E8E8"
                     app:rsv_starNum="5"
-                    app:rsv_rating="1"
+                    app:rsv_rating="4.0"
                     app:rsv_onlyHalfStar="true"
                     app:rsv_enableSelectRating="true"
                     app:rsv_starThickness="0.7"

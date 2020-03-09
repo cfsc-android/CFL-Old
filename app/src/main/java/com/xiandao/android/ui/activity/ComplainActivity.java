@@ -119,7 +119,7 @@ public class ComplainActivity extends BaseActivity {
         });
 
         dataList.add(new ImageViewInfo("plus"));
-        add_complain_rlv_pic.setLayoutManager(mGridLayoutManager = new GridLayoutManager(this,3));
+        add_complain_rlv_pic.setLayoutManager(mGridLayoutManager = new GridLayoutManager(this,4));
         adapter=new ImagePreviewListAdapter(this,R.layout.item_workflow_image_perview_list,dataList);
         add_complain_rlv_pic.setAdapter(adapter);
         add_complain_rlv_pic.addOnItemTouchListener(new OnItemClickListener() {
@@ -206,7 +206,7 @@ public class ComplainActivity extends BaseActivity {
         Map<String,Object> map=new HashMap<>();
         map.put("projectId","16f274b06fb2f8c87eb107841bfbbc05");
         map.put("roomId","16fa72dd4e7034b8aa5a2af40d1972ce");
-        map.put("ownerId","16fa73e5607ee21f4ff5e0842e7b5d4c");
+        map.put("householdId",FileManagement.getUserInfoEntity().getId());
         map.put("typeId",complainTypeValue);
         map.put("emerg",emergValue);
         map.put("content",add_complain_et_remark.getText().toString());
