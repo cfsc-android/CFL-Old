@@ -3,6 +3,7 @@ package com.xiandao.android.ui.fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiandao.android.R;
 import com.xiandao.android.entity.LoginUserEntity;
@@ -74,6 +76,16 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
         setContentView(view);
         initView(view);
 //        initData();
+        if(!TextUtils.isEmpty(FileManagement.getUserInfoEntity().getAvatarUrl())){
+            Glide.with(this)
+                    .load(FileManagement.getUserInfoEntity().getAvatarUrl())
+                    .error(R.drawable.ic_default_img)
+                    .circleCrop()
+                    .into(iv_new_mine_head);
+        }
+        tv_new_mine_name.setText(FileManagement.getUserInfoEntity().getNickName());
+        tv_new_mine_address.setText(FileManagement.getUserInfoEntity().getAncestor());
+        tv_new_mine_address.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void initData(){
@@ -103,9 +115,7 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
                         true);
                 tv_new_mine_name.setText(userEntity.getNickName());
             }
-            if (roomInfoEntity != null && roomInfoEntity.size() > 0) {
-                tv_new_mine_address.setText(Tools.getStringValue(roomInfoEntity.get(0).getAddress()));
-            }
+            tv_new_mine_address.setText(FileManagement.getUserInfoEntity().getAncestor());
             tv_new_mine_address.setTextColor(getResources().getColor(R.color.white));
         }
     }

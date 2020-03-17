@@ -29,6 +29,8 @@ import com.xiandao.android.entity.ThirdInfoEntity;
 import com.xiandao.android.entity.WeiXinLoginEntity;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.smart.BaseEntity;
+import com.xiandao.android.entity.smart.OrderStatusEntity;
+import com.xiandao.android.entity.smart.OrderTypeListEntity;
 import com.xiandao.android.entity.smart.SmsKeyEntity;
 import com.xiandao.android.entity.smart.TokenEntity;
 import com.xiandao.android.entity.smart.UserInfoEntity;
@@ -62,6 +64,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -70,6 +73,7 @@ import static com.xiandao.android.base.Config.AUTH;
 import static com.xiandao.android.base.Config.BASE_URL;
 import static com.xiandao.android.base.Config.BASIC;
 import static com.xiandao.android.base.Config.SMS;
+import static com.xiandao.android.base.Config.WORKORDER;
 
 
 /**
@@ -187,18 +191,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 openActivity(IpSettingActivity.class);
                 break;
             case R.id.ll_umeng_login_weixin:
-                if(projectInfo==null){
-                    Toast.makeText(LoginActivity.this,"请选择小区",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                authorization(SHARE_MEDIA.WEIXIN);
+                showToast("待开发");
+//                if(projectInfo==null){
+//                    Toast.makeText(LoginActivity.this,"请选择小区",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                authorization(SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.ll_umeng_login_qq:
-                if(projectInfo==null){
-                    Toast.makeText(LoginActivity.this,"请选择小区",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                authorization(SHARE_MEDIA.QQ);
+                showToast("敬请期待");
+//                if(projectInfo==null){
+//                    Toast.makeText(LoginActivity.this,"请选择小区",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                authorization(SHARE_MEDIA.QQ);
 
                 break;
             case R.id.tv_login_app_agreement:
@@ -452,7 +458,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 token.setInit_time(new Date().getTime()/1000);
                 FileManagement.setTokenEntity(token);
                 FileManagement.setPhone(mobileNum);
-                getUserInfo();
+                initData();
             }
 
             @Override
@@ -465,11 +471,136 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
+
+    private void initData(){
+        initOrderType();
+        initOrderStatus();
+        initComplainType();
+        initComplainStatus();
+        getUserInfo();
+    }
+
+    //初始化工单类型
+    private void initOrderType(){
+        Map<String,String> requestMap=new HashMap<>();
+        requestMap.put("pageNo","1");
+        requestMap.put("pageSize","100");
+        XUtils.Get(BASE_URL+WORKORDER+"work/orderType/pageByCondition",requestMap,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity<OrderTypeListEntity> baseEntity= JsonParse.parse(result, OrderTypeListEntity.class);
+                if(baseEntity.isSuccess()){
+                    FileManagement.setOrderType(baseEntity.getResult().getData());
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
+            }
+
+        });
+
+    }
+    //初始化工单状态
+    private void initOrderStatus(){
+        XUtils.Get(BASE_URL+WORKORDER+"work/orderStatus/selectWorkorderStatus",null,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    Type type = new TypeToken<List<OrderStatusEntity>>() {}.getType();
+                    List<OrderStatusEntity> list= (List<OrderStatusEntity>) JsonParse.parseList(result,type);
+                    FileManagement.setOrderStatus(list);
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
+            }
+
+        });
+
+    }
+    //初始化投诉类型
+    private void initComplainType(){
+        Map<String,String> requestMap=new HashMap<>();
+        requestMap.put("pageNo","1");
+        requestMap.put("pageSize","100");
+        XUtils.Get(BASE_URL+WORKORDER+"work/complaintType/pageByCondition",requestMap,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity<OrderTypeListEntity> baseEntity= JsonParse.parse(result, OrderTypeListEntity.class);
+                if(baseEntity.isSuccess()){
+                    FileManagement.setComplainType(baseEntity.getResult().getData());
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
+            }
+
+        });
+    }
+    //初始化投诉状态
+    private void initComplainStatus(){
+        XUtils.Get(BASE_URL+WORKORDER+"work/complaintStatus/complaintStatusList",null,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    Type type = new TypeToken<List<OrderStatusEntity>>() {}.getType();
+                    List<OrderStatusEntity> list= (List<OrderStatusEntity>) JsonParse.parseList(result,type);
+                    FileManagement.setComplainStatus(list);
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
+            }
+
+        });
+    }
     //获取用户信息
     private void getUserInfo(){
 
         RequestParams params=new RequestParams(BASE_URL+BASIC+"basic/householdInfo/phone");
-        params.addParameter("phoneNumber",mobileNum);
+        params.addParameter("phoneNumber",FileManagement.getPhone());
         x.http().get(params,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
@@ -478,10 +609,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 BaseEntity<UserInfoEntity> baseEntity= JsonParse.parse(result,UserInfoEntity.class);
                 if(baseEntity.isSuccess()){
                     FileManagement.setUserInfo(baseEntity.getResult());//缓存用户信息
-                    openActivity(MainActivity.class);//跳转到主界面
-                    finish();//关闭当前页面
+                    checkInitStatus(1);
                 }else{
                     showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
                 }
             }
 
@@ -489,14 +620,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onError(Throwable ex, boolean isOnCallback) {
                 super.onError(ex, isOnCallback);
                 showToast(ex.getMessage());
+                checkInitStatus(0);
             }
 
-            @Override
-            public void onFinished() {
-                super.onFinished();
-                stopProgressDialog();
-            }
+
         });
+    }
+
+
+    private List<Integer> initStatus=new ArrayList<>();
+
+    private void checkInitStatus(int status){
+        initStatus.add(status);
+        if(initStatus.indexOf(0)==-1&&initStatus.size()==5){
+            openActivity(MainActivity.class);
+            finish();
+        }
     }
 
     @Override

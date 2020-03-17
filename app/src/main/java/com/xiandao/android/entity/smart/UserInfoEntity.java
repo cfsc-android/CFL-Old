@@ -15,6 +15,7 @@ public class UserInfoEntity implements Serializable {
      * id : 16fa73e5607ee21f4ff5e0842e7b5d4c
      * name : 马冬梅
      * nickName : 马冬梅
+     * avatarUrl:
      * type : 1001
      * typeDisplay :
      * mobile : 18073695867
@@ -51,6 +52,7 @@ public class UserInfoEntity implements Serializable {
     private String id;
     private String name;
     private String nickName;
+    private String avatarUrl;
     private String type;
     private String typeDisplay;
     private String mobile;
@@ -108,6 +110,14 @@ public class UserInfoEntity implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getType() {
