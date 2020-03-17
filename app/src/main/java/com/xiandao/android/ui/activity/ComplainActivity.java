@@ -18,17 +18,16 @@ import com.andview.refreshview.utils.LogUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.jaredrummler.materialspinner.MaterialSpinnerAdapter;
 import com.xiandao.android.R;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.smart.BaseEntity;
-import com.xiandao.android.entity.smart.EmergType;
 import com.xiandao.android.entity.smart.OrderTypeEntity;
+import com.xiandao.android.entity.smart.UserType;
+import com.xiandao.android.entity.smart.WorkflowType;
 import com.xiandao.android.http.JsonParse;
 import com.xiandao.android.http.MyCallBack;
 import com.xiandao.android.http.XUtils;
 import com.xiandao.android.ui.BaseActivity;
-import com.xiandao.android.utils.ExitAppUtils;
 import com.xiandao.android.utils.FileManagement;
 import com.xiandao.android.utils.FilePathUtil;
 import com.xiandao.android.utils.PermissionsUtils;
@@ -81,8 +80,6 @@ public class ComplainActivity extends BaseActivity {
     private EditText add_complain_et_remark;
     @ViewInject(R.id.add_complain_rlv_pic)
     private RecyclerView add_complain_rlv_pic;
-    @ViewInject(R.id.add_complain_ms_emerg_type)
-    private MaterialSpinner add_complain_ms_emerg_type;
     @ViewInject(R.id.add_complain_ms_complain_type)
     private MaterialSpinner add_complain_ms_complain_type;
 
@@ -93,10 +90,8 @@ public class ComplainActivity extends BaseActivity {
     private boolean permissionFlag;
     private List<OrderTypeEntity> complainTypeEntityList;
     private List<String> complainTypeData=new ArrayList<>();
-    private String emergValue;
     private int complainTypeValue;
     private String resourceKey;
-    private MaterialSpinnerAdapter projectDataAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,14 +146,6 @@ public class ComplainActivity extends BaseActivity {
     }
 
     private void initSpinner(){
-        emergValue= EmergType.一般.getType();
-        add_complain_ms_emerg_type.setItems(EmergType.getEmergTypeList());
-        add_complain_ms_emerg_type.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                emergValue=EmergType.values()[position].getType();
-            }
-        });
         complainTypeEntityList= FileManagement.getComplainType();
         for (int i = 0; i < complainTypeEntityList.size(); i++) {
             complainTypeData.add(complainTypeEntityList.get(i).getName());
@@ -204,25 +191,28 @@ public class ComplainActivity extends BaseActivity {
             return;
         }
         Map<String,Object> map=new HashMap<>();
-        map.put("projectId","16f274b06fb2f8c87eb107841bfbbc05");
-        map.put("roomId","16fa72dd4e7034b8aa5a2af40d1972ce");
+        map.put("createType",UserType.Household.getType());
         map.put("householdId",FileManagement.getUserInfoEntity().getId());
+        map.put("problemDesc",add_complain_et_remark.getText().toString());
+        map.put("projectId",FileManagement.getUserInfoEntity().getRoomList().get(0).getProjectId());
+        map.put("reportType", UserType.Household.getType());
+        map.put("roomId",FileManagement.getUserInfoEntity().getRoomList().get(0).getId());
         map.put("typeId",complainTypeValue);
-        map.put("emerg",emergValue);
-        map.put("content",add_complain_et_remark.getText().toString());
         if(dataList.size()>1)
-            map.put("resourcekey",resourceKey);
-        XUtils.PostJson(BASE_URL+WORKORDER+"work/complaintOwner/addComplaint",map,new MyCallBack<String>(){
+            map.put("problemResourceKey",resourceKey);
+        XUtils.PostJson(BASE_URL+WORKORDER+"workflow/api/complaint",map,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
                 super.onSuccess(result);
                 LogUtils.d(result);
                 BaseEntity baseEntity= JsonParse.parse(result);
                 if(baseEntity.isSuccess()){
-                    if(LynActivityManager.getScreenManager().getActivityByClass(MyComplainActivity.class)!=null){
-                        EventBus.getDefault().post(new EventBusMessage<>("MyComplainRefresh"));
+                    if(LynActivityManager.getScreenManager().getActivityByClass(WorkflowListActivity.class)!=null){
+                        EventBus.getDefault().post(new EventBusMessage<>("WorkListRefresh"));
                     }else{
-                        openActivity(MyComplainActivity.class);
+                        Bundle bundle=new Bundle();
+                        bundle.putSerializable("workflowType", WorkflowType.Complain);
+                        openActivity(WorkflowListActivity.class,bundle);
                     }
                     finish();
 

@@ -1,13 +1,11 @@
 package com.xiandao.android.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,25 +14,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.pgyersdk.update.DownloadFileListener;
-import com.pgyersdk.update.PgyUpdateManager;
-import com.pgyersdk.update.UpdateManagerListener;
-import com.pgyersdk.update.javabean.AppBean;
+
 import com.xiandao.android.AndroidApplication;
 import com.xiandao.android.entity.LoginUserEntity;
 import com.xiandao.android.utils.Constants;
-import com.xiandao.android.utils.ExitAppUtils;
 import com.xiandao.android.utils.FileManagement;
+import com.xiandao.android.utils.PermissionUtil;
 import com.xiandao.android.view.ProgressDialogUtil;
 
 import org.xutils.app.LynActivityManager;
 import org.xutils.x;
+
+import static com.xiandao.android.utils.PermissionUtil.REQUEST_CODE;
 
 
 /**
@@ -87,6 +83,8 @@ public abstract class BaseActivity extends FragmentActivity {
 
     public LoginUserEntity loginUserEntity = FileManagement.getLoginUserEntity();
 
+    protected boolean permission=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +121,17 @@ public abstract class BaseActivity extends FragmentActivity {
 //        initCallBack();
 //        initData();
 //        setTitleView();
+    }
+
+
+    //检查应用权限
+    protected void checkAppPermission(){
+        String[] unGetPermission = PermissionUtil.checkPermission(this);
+        if(unGetPermission!=null){
+            ActivityCompat.requestPermissions(this,unGetPermission, REQUEST_CODE);
+        }else{
+            permission=true;
+        }
     }
 
     @Override
@@ -192,6 +201,13 @@ public abstract class BaseActivity extends FragmentActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (REQUEST_CODE == requestCode) {
+            for (int grantResult : grantResults) {
+                if (grantResult == -1) {
+                    permission=false;
+                }
+            }
+        }
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //权限通过
@@ -461,6 +477,7 @@ public abstract class BaseActivity extends FragmentActivity {
         clickable = false;
     }
 
+    @SuppressLint("RestrictedApi")
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void startActivityForResult(Intent intent, int requestCode, Bundle options) {
@@ -491,4 +508,6 @@ public abstract class BaseActivity extends FragmentActivity {
     protected void showToast(String content){
         Toast.makeText(this,content, Toast.LENGTH_SHORT).show();
     }
+
+
 }

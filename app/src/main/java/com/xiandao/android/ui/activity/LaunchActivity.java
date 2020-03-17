@@ -38,6 +38,8 @@ import com.xiandao.android.utils.Utils;
 import org.xutils.LogUtils;
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.ViewInject;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -317,9 +319,10 @@ public class LaunchActivity extends BaseActivity {
     }
     //获取用户信息
     private void getUserInfo(){
-        Map<String,String> map=new HashMap<>();
-        map.put("phoneNumber",FileManagement.getPhone());
-        XUtils.Get(BASE_URL+BASIC+"basic/householdInfo/phone",map,new MyCallBack<String>(){
+
+        RequestParams params=new RequestParams(BASE_URL+BASIC+"basic/householdInfo/phone");
+        params.addParameter("phoneNumber",FileManagement.getPhone());
+        x.http().get(params,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
                 super.onSuccess(result);

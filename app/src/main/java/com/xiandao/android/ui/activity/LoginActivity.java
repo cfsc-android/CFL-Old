@@ -368,9 +368,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * TODO：获取手机验证码
      */
     private void sendSMS() {
-        Map<String,Object> requestMap=new HashMap<>();
-        requestMap.put("phone",mobileNum);
-        XUtils.Post(BASE_URL+SMS+"sms-internal/codes",requestMap,new MyCallBack<String>(){
+        RequestParams params=new RequestParams(BASE_URL+SMS+"sms-internal/codes");
+
+        params.addBodyParameter("phone",mobileNum);
+        x.http().post(params,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
                 super.onSuccess(result);
@@ -466,9 +467,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     //获取用户信息
     private void getUserInfo(){
-        Map<String,String> map=new HashMap<>();
-        map.put("phoneNumber",mobileNum);
-        XUtils.Get(BASE_URL+BASIC+"basic/householdInfo/phone",map,new MyCallBack<String>(){
+
+        RequestParams params=new RequestParams(BASE_URL+BASIC+"basic/householdInfo/phone");
+        params.addParameter("phoneNumber",mobileNum);
+        x.http().get(params,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
                 super.onSuccess(result);

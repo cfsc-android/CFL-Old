@@ -60,7 +60,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.UnLockListActivity"></activity>
+        <activity android:name=".ui.activity.WorkflowListActivity"></activity>
+        <activity android:name=".ui.activity.UnLockListActivity" />
         <activity android:name=".ui.activity.WorkflowStepActivity" />
         <activity
             android:name=".ui.activity.LaunchActivity"

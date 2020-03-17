@@ -30,6 +30,15 @@
         android:id="@+id/workflow_action_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/workflow_action_content_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+
         <!--客户接受价格-->
         <LinearLayout
             android:id="@+id/workflow_action_accept_price"
@@ -173,6 +182,116 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
+
+
+
+        <!--已填投诉解决方案-->
+        <LinearLayout
+            android:id="@+id/workflow_action_write_plan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/write_plan_household_reject"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:layout_margin="20dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/btn_box_night_shape"
+                    android:text="不接受"
+                    android:textColor="@color/text_desc"
+                    android:textSize="16sp" />
+                <Button
+                    android:id="@+id/write_plan_household_accept"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:layout_margin="20dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/btn_solid_night_shape"
+                    android:text="接受"
+                    android:textColor="@color/text_white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--评价-->
+        <LinearLayout
+            android:id="@+id/workflow_action_complain_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="打分"/>
+                <com.idlestar.ratingstar.RatingStarView
+                    android:id="@+id/complain_comment_rate"
+                    android:background="#fff"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="10dp"
+                    app:rsv_cornerRadius="3dp"
+                    app:rsv_starMargin="12dp"
+                    app:rsv_strokeWidth="2px"
+                    app:rsv_strokeColor="#457DD7"
+                    app:rsv_starForegroundColor="#DB6958"
+                    app:rsv_starBackgroundColor="#E8E8E8"
+                    app:rsv_starNum="5"
+                    app:rsv_rating="4.0"
+                    app:rsv_onlyHalfStar="true"
+                    app:rsv_enableSelectRating="true"
+                    app:rsv_starThickness="0.7"
+                    app:rsv_drawStrokeForEmptyStar="false"
+                    app:rsv_drawStrokeForHalfStar="true"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="内容"/>
+                <EditText
+                    android:id="@+id/complain_comment_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:background="@drawable/bg_box_desc_shape"
+                    android:minLines="5"
+                    android:gravity="top"
+                    android:hint="输入评价内容"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/complain_comment_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="20dp"
+                android:layout_gravity="center"
+                android:background="@drawable/btn_solid_night_shape"
+                android:text="提交"
+                android:textColor="@color/text_white"
+                android:textSize="16sp" />
+        </LinearLayout>
     </FrameLayout>
 
 

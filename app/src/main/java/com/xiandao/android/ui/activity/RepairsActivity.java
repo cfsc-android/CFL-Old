@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -24,6 +23,8 @@ import com.xiandao.android.R;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.smart.BaseEntity;
 import com.xiandao.android.entity.smart.OrderTypeEntity;
+import com.xiandao.android.entity.smart.UserType;
+import com.xiandao.android.entity.smart.WorkflowType;
 import com.xiandao.android.http.JsonParse;
 import com.xiandao.android.http.MyCallBack;
 import com.xiandao.android.http.XUtils;
@@ -52,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import androidx.annotation.NonNull;
 import top.zibin.luban.CompressionPredicate;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
@@ -279,27 +281,31 @@ public class RepairsActivity extends BaseActivity {
         startProgressDialog("");
         Map<String,Object> requestMap=new HashMap<>();
         requestMap.put("address",add_order_et_address.getText().toString());
-        requestMap.put("typeId",projectValue);
-        requestMap.put("projectId","16f274b06fb2f8c87eb107841bfbbc05");
-        requestMap.put("roomId","16fa72dd4e7034b8aa5a2af40d1972ce");
-        requestMap.put("householdId","16fa73e5607ee21f4ff5e0842e7b5d4c");
+        requestMap.put("createType", UserType.Household.getType());
+        requestMap.put("expectTime",add_order_et_plain_time.getText().toString()+":00");
+        requestMap.put("householdId",FileManagement.getUserInfoEntity().getId());
         requestMap.put("linkMan",add_order_et_contact.getText().toString());
         requestMap.put("mobile",add_order_et_contact_tel.getText().toString());
-        requestMap.put("planTime",add_order_et_plain_time.getText().toString()+":00");
         requestMap.put("problemDesc",add_order_et_remark.getText().toString());
+        requestMap.put("projectId",FileManagement.getUserInfoEntity().getRoomList().get(0).getProjectId());
+        requestMap.put("reportType",UserType.Household.getType());
+        requestMap.put("roomId",FileManagement.getUserInfoEntity().getRoomList().get(0).getId());
+        requestMap.put("typeId",projectValue);
         if(dataList.size()>1)
-            requestMap.put("resourcekey",resourceKey);
-        XUtils.PostJson(BASE_URL+WORKORDER+"work/order/api/owner/addOrder",requestMap,new MyCallBack<String>(){
+            requestMap.put("problemResourceKey",resourceKey);
+        XUtils.PostJson(BASE_URL+WORKORDER+"workflow/api/workorder",requestMap,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
                 super.onSuccess(result);
                 LogUtils.d(result);
                 BaseEntity baseEntity= JsonParse.parse(result);
                 if(baseEntity.isSuccess()){
-                    if(LynActivityManager.getScreenManager().getActivityByClass(MyRepairsActivity.class)!=null){
-                        EventBus.getDefault().post(new EventBusMessage<>("MyRepairsRefresh"));
+                    if(LynActivityManager.getScreenManager().getActivityByClass(WorkflowListActivity.class)!=null){
+                        EventBus.getDefault().post(new EventBusMessage<>("WorkListRefresh"));
                     }else{
-                        openActivity(MyRepairsActivity.class);
+                        Bundle bundle=new Bundle();
+                        bundle.putSerializable("workflowType", WorkflowType.Order);
+                        openActivity(WorkflowListActivity.class,bundle);
                     }
                     finish();
                 }else{
@@ -319,8 +325,6 @@ public class RepairsActivity extends BaseActivity {
                 super.onFinished();
                 stopProgressDialog();
             }
-
-
         });
 
     }

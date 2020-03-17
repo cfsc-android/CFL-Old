@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp_10"
+    android:gravity="center"
+    android:orientation="horizontal">
+    <TextView
+        android:id="@+id/action_spinner_label"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:textSize="14sp"
+        android:textColor="@color/text_primary"/>
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/action_spinner_spinner"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"/>
+
+</LinearLayout>

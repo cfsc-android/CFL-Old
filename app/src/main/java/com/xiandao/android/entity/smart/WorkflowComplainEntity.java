@@ -12,40 +12,56 @@ public class WorkflowComplainEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
+
     /**
-     * id : 170684e3835bc3f573c33c547f892b7f
-     * complaintId : 1706839244464288cc0764f45e48067b
-     * nodeName : 电话沟通业主
-     * operation : 电话沟通业主
-     * handler : a75d45a015c44384a04449ee80dc3503
-     * handlerType : 1
-     * createTime : 2020-02-21 23:12:01
-     * updateTime :
+     * id : 170af3c3dd5c8b7c13da68b4b8f95c8f
+     * handlerId : b0aa355d5ea911eaab9e000c29b72d7a
+     * handlerName : 客服1
+     * mobile : 13564521234
+     * avatarUrl : http://10.222.1.38:80/group1/M00/00/03/Ct4BJl5gv-uAc2ckAAA6xQG929o578.jpg
+     * notAcceptable :
      * comment :
+     * nodeName : 检视投诉单
+     * operation : 住户APP建单
      * resourceKey :
-     * notAcceptable : 1
-     * handlerName : 超级管理员
-     * mobile :
-     * avatarUrl : http://img3.imgtn.bdimg.com/it/u=378824344,1185609431&fm=26&gp=0.jpg
-     * shortDesc : 长房数创科技有限公司
+     * shortDesc : 客服部
+     * createTime : 2020-03-06 17:45:26
+     * updateTime :
      */
 
     private String id;
-    private String complaintId;
-    private String nodeName;
-    private String operation;
-    private String handler;
-    private int handlerType;
-    private String createTime;
-    private String updateTime;
-    private String comment;
-    private String resourceKey;
-    private int notAcceptable;
+    private String handlerId;
     private String handlerName;
     private String mobile;
     private String avatarUrl;
+    private String notAcceptable;
+    private String comment;
+    private String nodeName;
+    private String operation;
+    private String resourceKey;
     private String shortDesc;
+    private String createTime;
+    private String updateTime;
     private List<ResourceEntity> resourceValue;
+    private List<OperationInfoEntity> operationInfos;
+    private String assigneeId;
+
+
+    public List<ResourceEntity> getResourceValue() {
+        return resourceValue;
+    }
+
+    public void setResourceValue(List<ResourceEntity> resourceValue) {
+        this.resourceValue = resourceValue;
+    }
+
+    public List<OperationInfoEntity> getOperationInfos() {
+        return operationInfos;
+    }
+
+    public void setOperationInfos(List<OperationInfoEntity> operationInfos) {
+        this.operationInfos = operationInfos;
+    }
 
     public String getId() {
         return id;
@@ -55,84 +71,12 @@ public class WorkflowComplainEntity implements Serializable {
         this.id = id;
     }
 
-    public String getComplaintId() {
-        return complaintId;
+    public String getHandlerId() {
+        return handlerId;
     }
 
-    public void setComplaintId(String complaintId) {
-        this.complaintId = complaintId;
-    }
-
-    public String getNodeName() {
-        return nodeName;
-    }
-
-    public void setNodeName(String nodeName) {
-        this.nodeName = nodeName;
-    }
-
-    public String getOperation() {
-        return operation;
-    }
-
-    public void setOperation(String operation) {
-        this.operation = operation;
-    }
-
-    public String getHandler() {
-        return handler;
-    }
-
-    public void setHandler(String handler) {
-        this.handler = handler;
-    }
-
-    public int getHandlerType() {
-        return handlerType;
-    }
-
-    public void setHandlerType(int handlerType) {
-        this.handlerType = handlerType;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getResourceKey() {
-        return resourceKey;
-    }
-
-    public void setResourceKey(String resourceKey) {
-        this.resourceKey = resourceKey;
-    }
-
-    public int getNotAcceptable() {
-        return notAcceptable;
-    }
-
-    public void setNotAcceptable(int notAcceptable) {
-        this.notAcceptable = notAcceptable;
+    public void setHandlerId(String handlerId) {
+        this.handlerId = handlerId;
     }
 
     public String getHandlerName() {
@@ -159,6 +103,46 @@ public class WorkflowComplainEntity implements Serializable {
         this.avatarUrl = avatarUrl;
     }
 
+    public String getNotAcceptable() {
+        return notAcceptable;
+    }
+
+    public void setNotAcceptable(String notAcceptable) {
+        this.notAcceptable = notAcceptable;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    public void setNodeName(String nodeName) {
+        this.nodeName = nodeName;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+
+    public String getResourceKey() {
+        return resourceKey;
+    }
+
+    public void setResourceKey(String resourceKey) {
+        this.resourceKey = resourceKey;
+    }
+
     public String getShortDesc() {
         return shortDesc;
     }
@@ -167,11 +151,27 @@ public class WorkflowComplainEntity implements Serializable {
         this.shortDesc = shortDesc;
     }
 
-    public List<ResourceEntity> getResourceValue() {
-        return resourceValue;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setResourceValue(List<ResourceEntity> resourceValue) {
-        this.resourceValue = resourceValue;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getAssigneeId() {
+        return assigneeId;
+    }
+
+    public void setAssigneeId(String assigneeId) {
+        this.assigneeId = assigneeId;
     }
 }

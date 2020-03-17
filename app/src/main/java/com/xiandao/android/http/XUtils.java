@@ -42,8 +42,14 @@ public class XUtils {
                 params.addQueryStringParameter(entry.getKey(), entry.getValue());
             }
         }
+        Map<String,String> headers=params.getHeaders();
+        for (Map.Entry<String,String> entry:headers.entrySet()) {
+            LogUtil.d(entry.getKey()+"-"+entry.getValue());
+        }
         return x.http().get(params, callback);
     }
+
+
 
     /**
      * 发送异步post请求
@@ -59,8 +65,13 @@ public class XUtils {
                 params.addParameter(entry.getKey(), entry.getValue());
             }
         }
+        Map<String,String> headers=params.getHeaders();
+        for (Map.Entry<String,String> entry:headers.entrySet()) {
+            LogUtil.d(entry.getKey()+"-"+entry.getValue());
+        }
         return x.http().post(params, callback);
     }
+
 
     /**
      * 发送异步post请求
@@ -76,8 +87,12 @@ public class XUtils {
             LogUtil.d(gson.toJson(object));
             params.setAsJsonContent(true);
             params.setBodyContent(gson.toJson(object));
-
         }
+        Map<String,String> headers=params.getHeaders();
+        for (Map.Entry<String,String> entry:headers.entrySet()) {
+            LogUtil.d(entry.getKey()+"-"+entry.getValue());
+        }
+
         return x.http().post(params, callback);
     }
 
@@ -96,16 +111,21 @@ public class XUtils {
             params.setAsJsonContent(true);
             params.setBodyContent(gson.toJson(map));
         }
+        Map<String,String> headers=params.getHeaders();
+        for (Map.Entry<String,String> entry:headers.entrySet()) {
+            LogUtil.d(entry.getKey()+"-"+entry.getValue());
+        }
         return x.http().request(HttpMethod.PUT,params, callback);
     }
 
 
     private static RequestParams addAuthorization(RequestParams params){
 //        if(Config.ENV.equals("release")){
-//            TokenEntity tokenEntity = FileManagement.getTokenEntity();
-//            if(tokenEntity!=null){
-//                params.addHeader("Authorization","bearer "+tokenEntity.getAccess_token());
-//            }
+            TokenEntity tokenEntity = FileManagement.getTokenEntity();
+            if(tokenEntity!=null){
+                params.addHeader("Authorization","bearer "+tokenEntity.getAccess_token());
+//                params.addHeader("Authorization",tokenEntity.getAccess_token());
+            }
 //        }
         return params;
     }

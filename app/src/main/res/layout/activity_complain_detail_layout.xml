@@ -2,145 +2,161 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar_layout" />
 
-    <ScrollView
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/complain_detail__srl"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        app:srlEnableLoadMore="false"
+        app:srlEnableScrollContentWhenLoaded="true"
+        app:srlEnableFooterFollowWhenLoadFinished="false"
+        >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-            <LinearLayout
+
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/view_background"
-                android:padding="10dp"
-                android:orientation="vertical">
+                android:layout_height="0dp"
+                android:layout_weight="1">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:id="@+id/complain_detail_user_avatar"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"/>
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/complain_detail_user_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_primary"/>
-                        <TextView
-                            android:id="@+id/complain_detail_user_room"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_desc"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="投诉类型 : "
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/sp_14"/>
-                    <TextView
-                        android:id="@+id/complain_detail_complain_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/text_primary"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="联系电话 : "
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"/>
-                    <TextView
-                        android:id="@+id/complain_detail_contact_tel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/text_primary"
-                        android:autoLink="phone"
-                        android:drawableLeft="@drawable/ic_action_phone"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="问题描述 : "
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"/>
+                    android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@color/view_background"
+                        android:padding="10dp"
                         android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/complain_detail_remark_text"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/text_primary"
-                            android:textSize="12sp"/>
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/complain_detail_remark_rlv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:id="@+id/complain_detail_remark_time"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:id="@+id/complain_detail_user_avatar"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"/>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/complain_detail_user_name"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/text_primary"/>
+                                <TextView
+                                    android:id="@+id/complain_detail_user_room"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/text_desc"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_primary"/>
-                    </LinearLayout>
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="投诉类型 : "
+                                android:textColor="@color/text_primary"
+                                android:textSize="@dimen/sp_14"/>
+                            <TextView
+                                android:id="@+id/complain_detail_complain_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_primary"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="联系电话 : "
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"/>
+                            <TextView
+                                android:id="@+id/complain_detail_contact_tel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_primary"
+                                android:autoLink="phone"
+                                android:drawableLeft="@drawable/ic_action_phone"
+                                android:textSize="12sp"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="问题描述 : "
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"/>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:id="@+id/complain_detail_remark_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/text_primary"
+                                    android:textSize="12sp"/>
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/complain_detail_remark_rlv"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"/>
+                                <TextView
+                                    android:id="@+id/complain_detail_remark_time"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:textSize="12sp"
+                                    android:textColor="@color/text_primary"/>
+                            </LinearLayout>
 
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/complain_detail_workflow_ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/view_background"
+                        android:padding="10dp"
+                        android:orientation="vertical">
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/complain_detail_workflow_ll"
+            </ScrollView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/body_background"/>
+            <FrameLayout
+                android:id="@+id/complain_detail_workflow_action_fl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/view_background"
-                android:padding="10dp"
-                android:orientation="vertical">
-            </LinearLayout>
+                android:background="@color/view_background"/>
         </LinearLayout>
-    </ScrollView>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/body_background"/>
-    <FrameLayout
-        android:id="@+id/complain_detail_workflow_action_fl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/view_background"/>
 
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>

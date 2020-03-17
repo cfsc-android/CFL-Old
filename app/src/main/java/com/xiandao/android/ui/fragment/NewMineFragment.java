@@ -17,6 +17,7 @@ import com.xiandao.android.entity.PersonalInfomation;
 import com.xiandao.android.entity.RoomInfoEntity;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.eventbus.NickNameEventBusData;
+import com.xiandao.android.entity.smart.WorkflowType;
 import com.xiandao.android.ui.BaseLazyFragment;
 import com.xiandao.android.ui.activity.CarManageActivity;
 import com.xiandao.android.ui.activity.CommentActivity;
@@ -30,6 +31,7 @@ import com.xiandao.android.ui.activity.SetMineActivity;
 import com.xiandao.android.ui.activity.SetttingActivity;
 import com.xiandao.android.ui.activity.UnLock;
 import com.xiandao.android.ui.activity.WaitingForDevelopmentActivity;
+import com.xiandao.android.ui.activity.WorkflowListActivity;
 import com.xiandao.android.utils.Constants;
 import com.xiandao.android.utils.FileManagement;
 import com.xiandao.android.utils.GlideImageLoader;
@@ -158,6 +160,7 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+        Bundle bundle=new Bundle();
         switch (v.getId()) {
             case R.id.ll_new_mine_head://更换头像与昵称
                 openActivity(PersonalInformationActivity.class);
@@ -165,14 +168,16 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
                 break;
             case R.id.tv_new_mine_gongdan://我的工单
                 if(bind){
-                    openActivity(MyRepairsActivity.class);
+                    bundle.putSerializable("workflowType", WorkflowType.Order);
+                    openActivity(WorkflowListActivity.class,bundle);
                 }else{
                     EventBus.getDefault().post(new EventBusMessage<>("unbind"));
                 }
                 break;
             case R.id.tv_new_mine_tousu://我的投诉
                 if(bind){
-                    openActivity(MyComplainActivity.class);
+                    bundle.putSerializable("workflowType", WorkflowType.Complain);
+                    openActivity(WorkflowListActivity.class,bundle);
                 }else{
                     EventBus.getDefault().post(new EventBusMessage<>("unbind"));
                 }
