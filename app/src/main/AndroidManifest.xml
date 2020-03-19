@@ -60,7 +60,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.WorkflowListActivity"></activity>
+        <activity android:name=".ui.activity.ProjectManageActivity"></activity>
+        <activity android:name=".ui.activity.OtherRoomDetailActivity" />
+        <activity android:name=".ui.HouseholdFaceActivity" />
+        <activity android:name=".ui.activity.WorkflowListActivity" />
         <activity android:name=".ui.activity.UnLockListActivity" />
         <activity android:name=".ui.activity.WorkflowStepActivity" />
         <activity
@@ -74,6 +77,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.HouseManageActivity" />
+        <activity android:name=".ui.activity.RoomMemberActivity" />
+        <activity android:name=".ui.activity.SelectCommunityActivity" />
+        <activity android:name=".ui.activity.HouseHoldActivity" />
         <activity
             android:name=".ui.activity.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

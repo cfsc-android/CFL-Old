@@ -1,22 +1,13 @@
 package com.xiandao.android.http;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
-import com.xiandao.android.base.Config;
 import com.xiandao.android.entity.smart.TokenEntity;
-import com.xiandao.android.http.hikhttp.HikParams;
 import com.xiandao.android.utils.FileManagement;
 import com.xiandao.android.utils.TokenUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.common.Callback.Cancelable;
 import org.xutils.common.Callback.CommonCallback;
-import org.xutils.common.Callback.ProgressCallback;
 import org.xutils.common.util.LogUtil;
 import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
@@ -123,8 +114,8 @@ public class XUtils {
 //        if(Config.ENV.equals("release")){
             TokenEntity tokenEntity = FileManagement.getTokenEntity();
             if(tokenEntity!=null){
-                params.addHeader("Authorization","bearer "+tokenEntity.getAccess_token());
-//                params.addHeader("Authorization",tokenEntity.getAccess_token());
+//                params.addHeader("Authorization","bearer "+tokenEntity.getAccess_token());
+                params.addHeader("test","bearer "+tokenEntity.getAccess_token());
             }
 //        }
         return params;

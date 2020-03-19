@@ -68,8 +68,6 @@ import static com.xiandao.android.base.Config.IOT;
  */
 @ContentView(R.layout.activity_visitor)
 public class VisitorActivity extends BaseActivity {
-    @ViewInject(R.id.iv_title_left)
-    private ImageView iv_title_left;
     @ViewInject(R.id.tv_title_name)
     private TextView tv_title_name;
     @ViewInject(R.id.visitor_srl)
@@ -136,7 +134,7 @@ public class VisitorActivity extends BaseActivity {
         map.put("pageSize",pageSize+"");
         map.put("phaseId",FileManagement.getUserInfoEntity().getRoomList().get(0).getPhaseId());
 //        map.put("userId",FileManagement.getUserInfoEntity().getId());
-        map.put("userId","a75d45a015c44384a04449ee80dc3503");
+//        map.put("userId","a75d45a015c44384a04449ee80dc3503");
         XUtils.Get(BASE_URL+IOT+"community/api/access/v1/visitor/pages",map,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {

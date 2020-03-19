@@ -26,6 +26,7 @@ import com.xiandao.android.ui.activity.CommentActivity;
 import com.xiandao.android.ui.activity.ExpressSearchActivity;
 import com.xiandao.android.ui.activity.FaceCollectionActivity;
 import com.xiandao.android.ui.activity.FaceCollectionListActivity;
+import com.xiandao.android.ui.activity.HouseHoldActivity;
 import com.xiandao.android.ui.activity.MyComplainActivity;
 import com.xiandao.android.ui.activity.MyRepairsActivity;
 import com.xiandao.android.ui.activity.PersonalInformationActivity;
@@ -76,9 +77,9 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
         setContentView(view);
         initView(view);
 //        initData();
-        if(!TextUtils.isEmpty(FileManagement.getUserInfoEntity().getAvatarUrl())){
+        if(!TextUtils.isEmpty(FileManagement.getUserInfoEntity().getAvatarResource())){
             Glide.with(this)
-                    .load(FileManagement.getUserInfoEntity().getAvatarUrl())
+                    .load(FileManagement.getUserInfoEntity().getAvatarResource())
                     .error(R.drawable.ic_default_img)
                     .circleCrop()
                     .into(iv_new_mine_head);
@@ -204,7 +205,8 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
                 break;
             case R.id.tv_new_nime_wallet:
 //                openActivity(CommentActivity.class);
-                startActivity(new Intent(getActivity(), WaitingForDevelopmentActivity.class).putExtra("title", "评价"));
+//                startActivity(new Intent(getActivity(), WaitingForDevelopmentActivity.class).putExtra("title", "评价"));
+                openActivity(HouseHoldActivity.class);
                 break;
             case R.id.tv_new_mine_data:
                 openActivity(PersonalInformationActivity.class);

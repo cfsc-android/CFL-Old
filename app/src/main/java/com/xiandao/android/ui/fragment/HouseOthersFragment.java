@@ -103,44 +103,44 @@ public class HouseOthersFragment extends BaseLazyFragment {
 //                openActivity(CarManageAddActivity.class,bundle);
 //            }
 //        });
-        getHouseManageList();
+//        getHouseManageList();
     }
 
-    private void getHouseManageList(){
-        startProgressDialog("");
-        Map<String,String> requestMap=new HashMap<>();
-        requestMap.put("pageNo","1");
-        requestMap.put("pageSize","10");
-        requestMap.put("phoneNumber","18073667979");//---------------------先写死做测试
-        XUtils.Get(BASE_URL+BASIC+"basic/householdInfo/phone",requestMap,new MyCallBack<String>(){
-            @Override
-            public void onSuccess(String result) {
-                super.onSuccess(result);
-                LogUtil.d(result);
-
-                ;                BaseEntity<UserInfoEntity> baseEntity = JsonParse.parse(result,UserInfoEntity.class);
-                if(baseEntity.isSuccess()){
-                    roomManageList.clear();
-                    roomManageList.addAll(baseEntity.getResult().getRoomList());
-                    houseManageListAdapter.notifyDataSetChanged();
-                }else{
-                    Tools.showPrompt(baseEntity.getMessage());
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                super.onError(ex, isOnCallback);
-                Tools.showPrompt(ex.getMessage());
-            }
-
-            @Override
-            public void onFinished() {
-                super.onFinished();
-                stopProgressDialog();
-            }
-        });
-
-    }
+//    private void getHouseManageList(){
+//        startProgressDialog("");
+//        Map<String,String> requestMap=new HashMap<>();
+//        requestMap.put("pageNo","1");
+//        requestMap.put("pageSize","10");
+//        requestMap.put("phoneNumber","18073667979");//---------------------先写死做测试
+//        XUtils.Get(BASE_URL+BASIC+"basic/householdInfo/phone",requestMap,new MyCallBack<String>(){
+//            @Override
+//            public void onSuccess(String result) {
+//                super.onSuccess(result);
+//                LogUtil.d(result);
+//
+//                ;                BaseEntity<UserInfoEntity> baseEntity = JsonParse.parse(result,UserInfoEntity.class);
+//                if(baseEntity.isSuccess()){
+//                    roomManageList.clear();
+//                    roomManageList.addAll(baseEntity.getResult().getRoomList());
+//                    houseManageListAdapter.notifyDataSetChanged();
+//                }else{
+//                    Tools.showPrompt(baseEntity.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable ex, boolean isOnCallback) {
+//                super.onError(ex, isOnCallback);
+//                Tools.showPrompt(ex.getMessage());
+//            }
+//
+//            @Override
+//            public void onFinished() {
+//                super.onFinished();
+//                stopProgressDialog();
+//            }
+//        });
+//
+//    }
 
 }

@@ -4,46 +4,41 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Loong on 2020/2/27.
+ * Created by Loong on 2020/3/18.
  * Version: 1.0
  * Describe:
  */
-public class UserInfoEntity implements Serializable {
+public class RoomHouseholdEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
-
-
-
-
     /**
-     * id : 170d7d64b85a488d3f7a70644ca9919c
-     * name : 18975879956
-     * nickName :
+     * id : 1708ed9bd5442a637fbd1c64298858fd
+     * name : 刘子帅
+     * nickName : 帅哥
      * avatarId :
      * avatarResource :
-     * type : ZH
-     * mobile : 18975879956
+     * type : 1001
+     * mobile : 15531270511
      * backupPhone :
      * faceId :
-     * defaultCardNo : 900900065
-     * idcardType : 0
-     * idcardTypeDisplay :
-     * idcardNo : 111
-     * gender :
-     * genderDisplay :
-     * birthday :
+     * defaultCardNo : 900900018
+     * idcardType : 1004
+     * idcardTypeDisplay : 驾驶证
+     * idcardNo : 123456
+     * gender : 0
+     * genderDisplay : 男
+     * birthday : 2000-02-01
      * email :
-     * checkinDate :
-     * country :
-     * nation :
+     * checkinDate : 2020-02-01
+     * country : 中国
+     * nation : 羌族
      * wechatNo :
      * qqNo :
      * hobby :
      * registered :
-     * education :
+     * education : 小学
      * educationDisplay :
-     * marriage :
+     * marriage : 离异
      * marriageDisplay :
      * occupation :
      * industry :
@@ -51,9 +46,10 @@ public class UserInfoEntity implements Serializable {
      * workCompany :
      * companyAddr :
      * unitFax :
-     * ancestor : 8栋-三单元-1003;8栋-三单元-sjtrfdgj
-     * householdType :
-     * householdTypeDisplay :
+     * faceInfos :
+     * ancestor :
+     * householdType : ZH
+     * householdTypeDisplay : 租户
      */
 
     private String id;
@@ -90,54 +86,10 @@ public class UserInfoEntity implements Serializable {
     private String workCompany;
     private String companyAddr;
     private String unitFax;
+    private List<ResourceEntity> faceInfos;
     private String ancestor;
     private String householdType;
     private String householdTypeDisplay;
-    private List<ResourceEntity> faceInfos;
-    private CurrentDistrictEntity currentDistrict;
-    private List<HouseholdRoomEntity> roomList;
-    private List<EntranceCardBoEntity> entranceCardBoList;
-    private List<EquipmentInfoBo> equipmentInfoBoList;
-
-    public List<ResourceEntity> getFaceInfos() {
-        return faceInfos;
-    }
-
-    public void setFaceInfos(List<ResourceEntity> faceInfos) {
-        this.faceInfos = faceInfos;
-    }
-
-    public CurrentDistrictEntity getCurrentDistrict() {
-        return currentDistrict;
-    }
-
-    public void setCurrentDistrict(CurrentDistrictEntity currentDistrict) {
-        this.currentDistrict = currentDistrict;
-    }
-
-    public List<HouseholdRoomEntity> getRoomList() {
-        return roomList;
-    }
-
-    public void setRoomList(List<HouseholdRoomEntity> roomList) {
-        this.roomList = roomList;
-    }
-
-    public List<EntranceCardBoEntity> getEntranceCardBoList() {
-        return entranceCardBoList;
-    }
-
-    public void setEntranceCardBoList(List<EntranceCardBoEntity> entranceCardBoList) {
-        this.entranceCardBoList = entranceCardBoList;
-    }
-
-    public List<EquipmentInfoBo> getEquipmentInfoBoList() {
-        return equipmentInfoBoList;
-    }
-
-    public void setEquipmentInfoBoList(List<EquipmentInfoBo> equipmentInfoBoList) {
-        this.equipmentInfoBoList = equipmentInfoBoList;
-    }
 
     public String getId() {
         return id;
@@ -409,6 +361,14 @@ public class UserInfoEntity implements Serializable {
 
     public void setUnitFax(String unitFax) {
         this.unitFax = unitFax;
+    }
+
+    public List<ResourceEntity> getFaceInfos() {
+        return faceInfos;
+    }
+
+    public void setFaceInfos(List<ResourceEntity> faceInfos) {
+        this.faceInfos = faceInfos;
     }
 
     public String getAncestor() {

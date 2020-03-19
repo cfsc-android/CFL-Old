@@ -2,89 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/title_backgroud"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/body_background"
     android:orientation="vertical">
 
     <include layout="@layout/title_layout" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:background="@color/white"
-        android:orientation="horizontal">
-        <TextView
-        android:id="@+id/tv_my_house"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginLeft="10dp"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:text="我的房屋"
-            />
-        <TextView
-            android:id="@+id/tv_manager_house"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:text="管理房屋"
-            />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@android:color/white"
-        android:baselineAligned="false"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp">
-
-        <TextView
-            android:id="@+id/item_house_current"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="当前房屋"
-            android:textSize="15dp"/>
-
-        <TextView
-            android:id="@+id/item_house_others"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="其他房屋"
-            android:textSize="15dp"/>
-        <TextView
-            android:id="@+id/item_house"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal|center_vertical"
-            android:textSize="15dp"/>
-        <TextView
-        android:id="@+id/item_house_null"
-        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_horizontal|center_vertical"
-        android:textSize="15dp"/>
+        android:background="@color/view_background"
+        android:orientation="vertical">
+        <com.xiandao.android.view.easyindicator.EasyIndicator
+            android:id="@+id/household_ei_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            app:indicator_line_show="true"
+            app:indicator_line_height="1dp"
+            app:indicator_height="40dp"
+            app:indicator_normal_color="@color/text_desc"
+            app:indicator_selected_color="@color/text_primary"
+            app:indicator_line_color="@color/text_primary"
+            app:indicator_textSize="@dimen/sp_14"
+            app:indicator_width="0dp"/>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/household_vp_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </LinearLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/mainViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@android:color/white"
-        />
 
 
 </LinearLayout>

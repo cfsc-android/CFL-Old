@@ -238,47 +238,47 @@ public class FaceCollectionPotoActivity extends BaseActivity{
 
     private void faceAccess(final FileEntity file){
         flag=0;
-        final List<RoomEntity> roomList=FileManagement.getUserInfoEntity().getRoomList();
-        for (int i = 0; i < roomList.size(); i++) {
-            Map<String,Object> requestMap=new HashMap<>();
-            requestMap.put("id",userId);
-            requestMap.put("name",name);
-            requestMap.put("phaseId",roomList.get(i).getPhaseId());
-            requestMap.put("unitIds",roomList.get(i).getUnitId());
-            XUtils.PostJson(BASE_URL+IOT+"community/api/access/v1/face/"+file.getId(),requestMap,new MyCallBack<String>(){
-                @Override
-                public void onSuccess(String result) {
-                    super.onSuccess(result);
-                    LogUtils.d(result);
-                    BaseEntity baseEntity= JsonParse.parse(result);
-                    if(baseEntity.isSuccess()){
-                        flag++;
-                    }else{
-                        showToast(baseEntity.getMessage());
-                        stopProgressDialog();
-                    }
-                }
-
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-                    super.onError(ex, isOnCallback);
-                    showToast(ex.getMessage());
-                    stopProgressDialog();
-                }
-
-                @Override
-                public void onFinished() {
-                    super.onFinished();
-                    if(flag==roomList.size()){
-                        stopProgressDialog();
-                        EventBusMessage<FaceCollectionEventBusData> eventBusMessage=new EventBusMessage<>("faceCollection");
-                        eventBusMessage.setData(new FaceCollectionEventBusData(file.getCreateTime(),file.getDomain()+file.getUrl()));
-                        EventBus.getDefault().post(eventBusMessage);
-                        finish();
-                    }
-                }
-            });
-        }
+//        final List<RoomEntity> roomList=FileManagement.getUserInfoEntity().getRoomList();
+//        for (int i = 0; i < roomList.size(); i++) {
+//            Map<String,Object> requestMap=new HashMap<>();
+//            requestMap.put("id",userId);
+//            requestMap.put("name",name);
+//            requestMap.put("phaseId",roomList.get(i).getPhaseId());
+//            requestMap.put("unitIds",roomList.get(i).getUnitId());
+//            XUtils.PostJson(BASE_URL+IOT+"community/api/access/v1/face/"+file.getId(),requestMap,new MyCallBack<String>(){
+//                @Override
+//                public void onSuccess(String result) {
+//                    super.onSuccess(result);
+//                    LogUtils.d(result);
+//                    BaseEntity baseEntity= JsonParse.parse(result);
+//                    if(baseEntity.isSuccess()){
+//                        flag++;
+//                    }else{
+//                        showToast(baseEntity.getMessage());
+//                        stopProgressDialog();
+//                    }
+//                }
+//
+//                @Override
+//                public void onError(Throwable ex, boolean isOnCallback) {
+//                    super.onError(ex, isOnCallback);
+//                    showToast(ex.getMessage());
+//                    stopProgressDialog();
+//                }
+//
+//                @Override
+//                public void onFinished() {
+//                    super.onFinished();
+//                    if(flag==roomList.size()){
+//                        stopProgressDialog();
+//                        EventBusMessage<FaceCollectionEventBusData> eventBusMessage=new EventBusMessage<>("faceCollection");
+//                        eventBusMessage.setData(new FaceCollectionEventBusData(file.getCreateTime(),file.getDomain()+file.getUrl()));
+//                        EventBus.getDefault().post(eventBusMessage);
+//                        finish();
+//                    }
+//                }
+//            });
+//        }
     }
 
     /**

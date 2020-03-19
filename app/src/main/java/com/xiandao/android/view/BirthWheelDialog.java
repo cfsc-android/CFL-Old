@@ -171,7 +171,7 @@ public class BirthWheelDialog extends Dialog implements View.OnClickListener {
 //        min.setVisibleItems(7);
 //        sec.setVisibleItems(7);
 
-        year.setCurrentItem(curYear+101);
+        year.setCurrentItem(curYear-90);
         month.setCurrentItem(curMonth - 1);
         day.setCurrentItem(curDate - 1);
 //        min.setCurrentItem(curHour-1);
@@ -199,9 +199,10 @@ public class BirthWheelDialog extends Dialog implements View.OnClickListener {
     public void setBirth(String birth){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar=Calendar.getInstance();
+        Calendar nowCalendar=Calendar.getInstance();
         try {
             calendar.setTime(format.parse(birth));
-            year.setCurrentItem(calendar.get(Calendar.YEAR)-101);
+            year.setCurrentItem(calendar.get(Calendar.YEAR)+100-nowCalendar.get(Calendar.YEAR));
             month.setCurrentItem(calendar.get(Calendar.MONTH));
             day.setCurrentItem(calendar.get(Calendar.DAY_OF_MONTH) - 1);
             date.setText(calendar.get(Calendar.YEAR)

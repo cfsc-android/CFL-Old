@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,12 +14,12 @@
         android:orientation="vertical"
         android:gravity="center">
         <ImageView
-            android:id="@+id/iv_user_pic"
+            android:id="@+id/household_face_iv_pic"
             android:layout_width="@dimen/x_px_400"
             android:layout_height="@dimen/x_px_400"
             android:src="@mipmap/moren_tx_hui"/>
         <TextView
-            android:id="@+id/tv_user_text"
+            android:id="@+id/household_face_tv_text"
             android:layout_width="@dimen/x_px_400"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -27,7 +28,7 @@
             android:text="人脸照片尚未上传"/>
     </LinearLayout>
     <Button
-        android:id="@+id/btn_face_collection"
+        android:id="@+id/household_face_btn_collection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

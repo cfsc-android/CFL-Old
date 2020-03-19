@@ -117,7 +117,7 @@ public class RoomDelectFragment extends BaseLazyFragment {
                 ;                BaseEntity<UserInfoEntity> baseEntity = JsonParse.parse(result,UserInfoEntity.class);
                 if(baseEntity.isSuccess()){
                     roomManageList.clear();
-                    roomManageList.addAll(baseEntity.getResult().getRoomList());
+//                    roomManageList.addAll(baseEntity.getResult().getRoomList());
                     houseManageListAdapter.notifyDataSetChanged();
                 }else{
                     Tools.showPrompt(baseEntity.getMessage());

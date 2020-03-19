@@ -1,58 +1,57 @@
 package com.xiandao.android.entity.smart;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * Created by Loong on 2020/2/27.
+ * Created by Loong on 2020/3/18.
  * Version: 1.0
  * Describe:
  */
-public class RoomEntity implements Serializable {
+public class HouseholdRoomEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
     /**
-     * id : 16f3ac1665814320b80f1e94825be615
-     * unitId : ec93bb06f5be4c1f19522ca78180e2i6
-     * unitName : 三单元
-     * name : 1003
-     * code : 123123
-     * floor : 12
-     * number : 1003
-     * floorNo : 10
-     * roomNo : 3
-     * propertySpace : 123
-     * usingArea : 123
-     * paymentMode : QUARTER
-     * paymentModeDisplay :
-     * checkinStatus : 已入住
-     * checkinStatusDisplay :
+     * id : 16fa72dd4e7034b8aa5a2af40d1972ce
+     * unitId : 16f2798fd7de1000c3af4664549960f6
+     * unitName : 一单元
+     * name : 3202
+     * code : 1-1-3202
+     * floor : 32
+     * number : 3202
+     * floorNo : 32
+     * roomNo : 2
+     * propertySpace : 108.6
+     * usingArea : 96
+     * paymentMode : YEAR
+     * paymentModeDisplay : 按年补缴
+     * checkinStatus : EMPTY
+     * checkinStatusDisplay : 空置
      * status : 0
      * description :
-     * apartment : SS
-     * apartmentDisplay :
+     * apartment : LS
+     * apartmentDisplay : 两室
      * purpose :
      * orientation : S
-     * orientationDisplay :
+     * orientationDisplay : 正南
      * decorationStandard : JZ
-     * decorationStandardDisplay :
+     * decorationStandardDisplay : 精装
      * propertyNo :
      * propertyName :
      * propertyMark :
      * createBy :
      * updateBy : a75d45a015c44384a04449ee80dc3503
-     * createTime : 2019-12-25 09:52:31
-     * updateTime : 2020-02-29 11:24:12
-     * projectId : ec93bb06f5be4c1f19522ca78180e2i9
-     * projectName : 长房时代城
-     * phaseId : ec93bb06f5be4c1f19522ca78180e2i8
-     * phaseName : 二期
-     * buildingId : ec93bb06f5be4c1f19522ca78180e2i7
-     * buildingName : 8栋
-     * fullName : 8栋-三单元-1003
-     * householdType :
-     * householdTypeDisplay :
+     * createTime : 2020-01-15 11:09:56
+     * updateTime : 2020-01-21 17:05:44
+     * projectId : 16f274b06fb2f8c87eb107841bfbbc05
+     * projectName : 长房明宸府
+     * phaseId : 16f27973c392f54863e7b90438cac119
+     * phaseName : 一期
+     * buildingId : 16f2797fa53912e5fd2a1124b1fa7265
+     * buildingName : 1栋
+     * fullName : 1栋-一单元-3202
+     * householdType : ZH
+     * householdTypeDisplay : 租户
      * roomBoMap :
      */
 
@@ -65,7 +64,7 @@ public class RoomEntity implements Serializable {
     private String number;
     private String floorNo;
     private String roomNo;
-    private int propertySpace;
+    private double propertySpace;
     private int usingArea;
     private String paymentMode;
     private String paymentModeDisplay;
@@ -97,14 +96,14 @@ public class RoomEntity implements Serializable {
     private String householdType;
     private String householdTypeDisplay;
     private String roomBoMap;
-    private List<RoomHouseholdEntity> householdBoList;
+    private int approvalStatus;
 
-    public List<RoomHouseholdEntity> getHouseholdBoList() {
-        return householdBoList;
+    public int getApprovalStatus() {
+        return approvalStatus;
     }
 
-    public void setHouseholdBoList(List<RoomHouseholdEntity> householdBoList) {
-        this.householdBoList = householdBoList;
+    public void setApprovalStatus(int approvalStatus) {
+        this.approvalStatus = approvalStatus;
     }
 
     public String getId() {
@@ -179,11 +178,11 @@ public class RoomEntity implements Serializable {
         this.roomNo = roomNo;
     }
 
-    public int getPropertySpace() {
+    public double getPropertySpace() {
         return propertySpace;
     }
 
-    public void setPropertySpace(int propertySpace) {
+    public void setPropertySpace(double propertySpace) {
         this.propertySpace = propertySpace;
     }
 

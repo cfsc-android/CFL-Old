@@ -17,6 +17,7 @@ import com.xiandao.android.entity.LoginUserEntity;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.eventbus.FaceCollectionEventBusData;
 import com.xiandao.android.entity.eventbus.NickNameEventBusData;
+import com.xiandao.android.entity.smart.UserInfoEntity;
 import com.xiandao.android.ui.BaseActivity;
 import com.xiandao.android.utils.FileManagement;
 import com.xiandao.android.utils.Tools;
@@ -44,14 +45,14 @@ public class PersonalNickNameActivity extends BaseActivity {
     @ViewInject(R.id.et_nick_name)
     private EditText et_nick_name;
 
-    private LoginUserEntity personal;
+    private UserInfoEntity userInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        personal=FileManagement.getLoginUserEntity();
-        if(!Tools.isEmpty(personal.getNickName())){
-            et_nick_name.setText(personal.getNickName());
-            et_nick_name.setSelection(personal.getNickName().length());
+        userInfo=FileManagement.getUserInfoEntity();
+        if(!Tools.isEmpty(userInfo.getNickName())){
+            et_nick_name.setText(userInfo.getNickName());
+            et_nick_name.setSelection(userInfo.getNickName().length());
         }
         et_nick_name.addTextChangedListener(new TextWatcher(){
             @Override

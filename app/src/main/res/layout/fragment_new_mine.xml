@@ -191,7 +191,7 @@
             android:gravity="center_horizontal"
             android:paddingBottom="@dimen/y_px_36"
             android:paddingTop="@dimen/y_px_36"
-            android:text="评价"
+            android:text="我的房屋"
             android:textColor="@color/black"
             android:textSize="@dimen/x_px_28" />
 
