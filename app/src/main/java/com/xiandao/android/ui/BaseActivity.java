@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -97,7 +98,7 @@ public abstract class BaseActivity extends FragmentActivity {
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
-        LynActivityManager.getScreenManager().pushActivity(this);
+        LynActivityManager.getInstance().pushActivity(this);
         mScreenWidth = metric.widthPixels;
         mScreenHeight = metric.heightPixels;
         Constants.SWidth = mScreenWidth;
@@ -415,7 +416,7 @@ public abstract class BaseActivity extends FragmentActivity {
         if (AndroidApplication.getInstance().threadPoolManager != null) {
             AndroidApplication.getInstance().threadPoolManager.stopAllTask();
         }
-        LynActivityManager.getScreenManager().popActivity(this);
+        LynActivityManager.getInstance().popActivity(this);
     }
 
     /*
@@ -498,6 +499,13 @@ public abstract class BaseActivity extends FragmentActivity {
         if (progressDialogUtil != null) {
             progressDialogUtil.stopLoad();
         }
+    }
+
+    protected void startCustomerDialog(View v,boolean cancelable){
+        if (progressDialogUtil == null) {
+            progressDialogUtil = new ProgressDialogUtil();
+        }
+        progressDialogUtil.startCustomerLoad(this, v,cancelable);
     }
 
 //    public void onEvent(AnyEventType event) {

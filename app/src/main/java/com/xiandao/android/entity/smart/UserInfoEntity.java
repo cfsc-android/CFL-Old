@@ -60,7 +60,7 @@ public class UserInfoEntity implements Serializable {
     private String name;
     private String nickName;
     private String avatarId;
-    private String avatarResource;
+    private ResourceEntity avatarResource;
     private String type;
     private String mobile;
     private String backupPhone;
@@ -171,11 +171,11 @@ public class UserInfoEntity implements Serializable {
         this.avatarId = avatarId;
     }
 
-    public String getAvatarResource() {
+    public ResourceEntity getAvatarResource() {
         return avatarResource;
     }
 
-    public void setAvatarResource(String avatarResource) {
+    public void setAvatarResource(ResourceEntity avatarResource) {
         this.avatarResource = avatarResource;
     }
 

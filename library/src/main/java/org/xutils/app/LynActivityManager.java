@@ -5,16 +5,22 @@ import android.app.Activity;
 import java.util.Stack;
 
 public class LynActivityManager {
-    private static Stack<Activity> activityStack;
-    private static LynActivityManager instance;
 
-    public static LynActivityManager getScreenManager() {
+    private volatile static LynActivityManager instance = null;
+    private static Stack<Activity> activityStack;
+    private LynActivityManager () {}
+
+    public static LynActivityManager getInstance() {
         if (instance == null) {
-            instance = new LynActivityManager();
+            synchronized (LynActivityManager.class) {
+                if (instance == null) {
+                    instance = new LynActivityManager();
+                }
+            }
         }
         return instance;
-    }
 
+    }
     /**
      * @param activity
      * @方法说明:销毁指定的Activity
@@ -35,9 +41,9 @@ public class LynActivityManager {
      * 结束指定类名的Activity
      */
     public void finishActivity(Class<?> cls) {
-        for (Activity activity : activityStack) {
-            if (activity.getClass().equals(cls)) {
-                popActivity(activity);
+        for (int i = 0; i < activityStack.size(); i++) {
+            if (activityStack.get(i).getClass().equals(cls)) {
+                popActivity(activityStack.get(i));
             }
         }
     }
@@ -66,7 +72,7 @@ public class LynActivityManager {
      */
     public void pushActivity(Activity activity) {
         if (activityStack == null) {
-            activityStack = new Stack<Activity>();
+            activityStack = new Stack<>();
         }
         activityStack.add(activity);
     }

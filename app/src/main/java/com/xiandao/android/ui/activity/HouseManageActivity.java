@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.andview.refreshview.utils.LogUtils;
@@ -17,22 +17,27 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.google.gson.reflect.TypeToken;
 import com.xiandao.android.R;
-import com.xiandao.android.adapter.CarManageListAdapter;
-import com.xiandao.android.adapter.HouseManageListAdapter;
 import com.xiandao.android.adapter.smart.HouseManageAdapter;
+import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.smart.ApprovalStatusType;
 import com.xiandao.android.entity.smart.BaseEntity;
 import com.xiandao.android.entity.smart.CurrentDistrictEntity;
 import com.xiandao.android.entity.smart.HouseholdRoomEntity;
+import com.xiandao.android.entity.smart.UserInfoEntity;
 import com.xiandao.android.http.JsonParse;
 import com.xiandao.android.http.MyCallBack;
 import com.xiandao.android.http.XUtils;
 import com.xiandao.android.ui.BaseActivity;
 import com.xiandao.android.utils.FileManagement;
 
+import org.greenrobot.eventbus.EventBus;
+import org.xutils.app.LynActivityManager;
+import org.xutils.common.util.LogUtil;
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.Event;
 import org.xutils.event.annotation.ViewInject;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -64,8 +69,16 @@ public class HouseManageActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tv_title_name.setText("管理房屋");
-        currentAdapter = new HouseManageAdapter(this,currentData);
+        currentAdapter = new HouseManageAdapter(this,currentData,false);
         house_manage_current_smlv_list.setAdapter(currentAdapter);
+        house_manage_current_smlv_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle=new Bundle();
+                bundle.putString("roomId",currentData.get(position).getId());
+                openActivity(HouseholdAuditListActivity.class,bundle);
+            }
+        });
         // 为ListView设置创建器
         house_manage_current_smlv_list.setMenuCreator(creator);
         // 第2步：为ListView设置菜单项点击监听器，来监听菜单项的点击事件
@@ -87,8 +100,16 @@ public class HouseManageActivity extends BaseActivity{
                 return false;
             }
         });
-        otherAdapter = new HouseManageAdapter(this,otherData);
+        otherAdapter = new HouseManageAdapter(this,otherData,false);
         house_manage_smlv_list.setAdapter(otherAdapter);
+        house_manage_smlv_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle=new Bundle();
+                bundle.putString("roomId",otherData.get(position).getId());
+                openActivity(HouseholdAuditListActivity.class,bundle);
+            }
+        });
         // 为ListView设置创建器
         house_manage_smlv_list.setMenuCreator(creator);
         // 第2步：为ListView设置菜单项点击监听器，来监听菜单项的点击事件
@@ -104,7 +125,12 @@ public class HouseManageActivity extends BaseActivity{
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        deleteOtherRoom(position);
+                                        HouseholdRoomEntity roomEntity=otherData.get(position);
+                                        if(roomEntity.getApprovalStatus()== ApprovalStatusType.Pass.getType()){
+                                            deleteOtherRoom(roomEntity.getId());
+                                        }else{
+                                            deleteRefuseRoom(roomEntity.getApprovalId());
+                                        }
                                     }
                                 }).show();
                 return false;
@@ -116,15 +142,18 @@ public class HouseManageActivity extends BaseActivity{
     private void intData(){
         CurrentDistrictEntity currentRoom=FileManagement.getUserInfoEntity().getCurrentDistrict();
         List<HouseholdRoomEntity> roomList= FileManagement.getUserInfoEntity().getRoomList();
-        for (int i = 0; i < roomList.size(); i++) {
-            if(roomList.get(i).getId().equals(currentRoom.getId())){
-                currentData.add(roomList.get(i));
-            }else{
-                otherData.add(roomList.get(i));
+        if(roomList!=null&&roomList.size()>0){
+            for (int i = 0; i < roomList.size(); i++) {
+                roomList.get(i).setApprovalStatus(2);
+                if(roomList.get(i).getId().equals(currentRoom.getRoomId())){
+                    currentData.add(roomList.get(i));
+                }else{
+                    otherData.add(roomList.get(i));
+                }
             }
+            currentAdapter.notifyDataSetChanged();
+            otherAdapter.notifyDataSetChanged();
         }
-        currentAdapter.notifyDataSetChanged();
-        otherAdapter.notifyDataSetChanged();
         getRoomData();
     }
 
@@ -160,12 +189,166 @@ public class HouseManageActivity extends BaseActivity{
     }
 
     private void deleteCurrentRoom(){
+        startProgressDialog("");
+        Map<String,String> map=new HashMap<>();
+        List<HouseholdRoomEntity> list=FileManagement.getUserInfoEntity().getRoomList();
+        String roomId=currentData.get(0).getId();
+        for (int i = 0; i < list.size(); i++) {
+            if(!roomId.equals(list.get(i).getId())){
+                map.put(list.get(i).getId(),list.get(i).getHouseholdType());
+            }
+        }
+        Map<String,Object> requestMap=new HashMap<>();
+        requestMap.put("id",FileManagement.getUserInfoEntity().getId());
+        requestMap.put("roomMap",map);
+        XUtils.Put(BASE_URL+BASIC+"basic/householdInfo",null,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    unBindRoom();
+                }else{
+                    showToast(baseEntity.getMessage());
+                }
+            }
 
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+            }
+        });
     }
 
-    private void deleteOtherRoom(int position){
+    private void unBindRoom(){
+        Map<String,Object> map=new HashMap<>();
+        map.put("projectId",currentData.get(0).getProjectId());
+        map.put("householdId", FileManagement.getUserInfoEntity().getId());
+        XUtils.PostJson(BASE_URL+BASIC+"basic/current/bind",map,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtil.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    getUserInfo(true);
+                }else{
+                    showToast(baseEntity.getMessage());
+                }
+            }
 
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+            }
+        });
     }
+
+
+    private void deleteOtherRoom(String roomId){
+        startProgressDialog("");
+        Map<String,String> map=new HashMap<>();
+        List<HouseholdRoomEntity> list=FileManagement.getUserInfoEntity().getRoomList();
+        for (int i = 0; i < list.size(); i++) {
+            if(!roomId.equals(list.get(i).getId())){
+                map.put(list.get(i).getId(),list.get(i).getHouseholdType());
+            }
+        }
+        Map<String,Object> requestMap=new HashMap<>();
+        requestMap.put("id",FileManagement.getUserInfoEntity().getId());
+        requestMap.put("roomMap",map);
+        XUtils.Put(BASE_URL+BASIC+"basic/householdInfo",requestMap,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    getUserInfo(false);
+                }else{
+                    showToast(baseEntity.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+            }
+        });
+    }
+
+    private void deleteRefuseRoom(String approvalId){
+        startProgressDialog("");
+        Map<String,Object> map=new HashMap<>();
+        map.put("id",approvalId);
+        XUtils.Delete(BASE_URL+BASIC+"basic/verify/delete",map,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    intData();
+                }else{
+                    showToast(baseEntity.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+            }
+
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                stopProgressDialog();
+            }
+        });
+    }
+
+    private void getUserInfo(final boolean finish){
+        RequestParams params=new RequestParams(BASE_URL+BASIC+"basic/householdInfo/phone");
+        params.addParameter("phoneNumber",FileManagement.getPhone());
+        x.http().get(params,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity<UserInfoEntity> baseEntity= JsonParse.parse(result,UserInfoEntity.class);
+                if(baseEntity.isSuccess()){
+                    FileManagement.setUserInfo(baseEntity.getResult());//缓存用户信息
+                    if(finish){
+                        LynActivityManager.getInstance().finishActivity(HouseHoldActivity.class);
+                        EventBus.getDefault().post(new EventBusMessage<>("projectSelect"));
+                        finish();
+                    }else{
+                        intData();
+                    }
+                }else{
+                    showToast(baseEntity.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+            }
+
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                stopProgressDialog();
+            }
+        });
+    }
+
 
     private SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -196,7 +379,9 @@ public class HouseManageActivity extends BaseActivity{
                 finish();
                 break;
             case R.id.house_manage_ll_add:
-                
+                Bundle bundle=new Bundle();
+                bundle.putString("openFrom","HouseManage");
+                openActivity(ProjectSelectActivity.class,bundle);
                 break;
         }
     }

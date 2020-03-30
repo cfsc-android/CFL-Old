@@ -7,13 +7,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.xiandao.android.R;
 import com.xiandao.android.adapter.smart.HouseholdPagerAdapter;
+import com.xiandao.android.entity.eventbus.EventBusMessage;
+import com.xiandao.android.entity.eventbus.FaceCollectionEventBusData;
 import com.xiandao.android.ui.BaseActivity;
 import com.xiandao.android.ui.fragment.CurrentRoomFragment;
 import com.xiandao.android.ui.fragment.OtherRoomFragment;
 import com.xiandao.android.view.easyindicator.EasyIndicator;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.Event;
 import org.xutils.event.annotation.ViewInject;
@@ -53,6 +59,8 @@ public class HouseHoldActivity extends BaseActivity{
         household_ei_tab.setViewPager(household_vp_tab, adapter);
         household_vp_tab.setOffscreenPageLimit(1);
         household_vp_tab.setCurrentItem(0);
+
+        EventBus.getDefault().register(this);
     }
 
 
@@ -68,6 +76,18 @@ public class HouseHoldActivity extends BaseActivity{
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventBusMessage message){
+        if("householdAudit".equals(message.getMessage())){
+            household_vp_tab.setCurrentItem(1);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
 }
 

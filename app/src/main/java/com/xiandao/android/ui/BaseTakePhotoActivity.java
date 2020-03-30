@@ -1,5 +1,6 @@
 package com.xiandao.android.ui;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -92,7 +93,7 @@ public abstract class BaseTakePhotoActivity extends FragmentActivity implements 
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
-        LynActivityManager.getScreenManager().pushActivity(this);
+        LynActivityManager.getInstance().pushActivity(this);
         mScreenWidth = metric.widthPixels;
         mScreenHeight = metric.heightPixels;
         Constants.SWidth = mScreenWidth;
@@ -390,7 +391,7 @@ public abstract class BaseTakePhotoActivity extends FragmentActivity implements 
         if (AndroidApplication.getInstance().threadPoolManager != null) {
             AndroidApplication.getInstance().threadPoolManager.stopAllTask();
         }
-        LynActivityManager.getScreenManager().popActivity(this);
+        LynActivityManager.getInstance().popActivity(this);
     }
 
     /*
@@ -452,6 +453,7 @@ public abstract class BaseTakePhotoActivity extends FragmentActivity implements 
         clickable = false;
     }
 
+    @SuppressLint("RestrictedApi")
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void startActivityForResult(Intent intent, int requestCode, Bundle options) {

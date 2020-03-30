@@ -17,12 +17,12 @@ public class Config {
     public static final String SD_APP_DIR_NAME = "CFL"; //存储程序在外部SD卡上的根目录的名字
     public static final String PHOTO_DIR_NAME = "photo";    //存储照片在根目录下的文件夹名字
 
-//    public static final String AUTH=ENV.equals("debug")?"":"api-auth/";//鉴权
-    public static final String AUTH="api-auth/";//鉴权
-//    public static final String SMS=ENV.equals("debug")?"":"sms-manager-ms/";//验证
-    public static final String SMS="sms-manager-ms/";//验证
-//    public static final String FILE=ENV.equals("debug")?"":"file-manager-ms/";//文件
-    public static final String FILE="file-manager-ms/";//文件
+    public static final String AUTH=ENV.equals("debug")?"":"api-auth/";//鉴权
+//    public static final String AUTH="api-auth/";//鉴权
+    public static final String SMS=ENV.equals("debug")?"":"sms-manager-ms/";//验证
+//    public static final String SMS="sms-manager-ms/";//验证
+    public static final String FILE=ENV.equals("debug")?"":"file-manager-ms/";//文件
+//    public static final String FILE="file-manager-ms/";//文件
     public static final String USER=ENV.equals("debug")?"":"api-user/";//用户
     public static final String ARTICLE=ENV.equals("debug")?"":"smart-content-ms/";//文章
     public static final String IOT=ENV.equals("debug")?"":"smart-iot-ms/";//物联

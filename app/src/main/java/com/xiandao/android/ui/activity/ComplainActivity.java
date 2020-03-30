@@ -207,7 +207,7 @@ public class ComplainActivity extends BaseActivity {
                 LogUtils.d(result);
                 BaseEntity baseEntity= JsonParse.parse(result);
                 if(baseEntity.isSuccess()){
-                    if(LynActivityManager.getScreenManager().getActivityByClass(WorkflowListActivity.class)!=null){
+                    if(LynActivityManager.getInstance().getActivityByClass(WorkflowListActivity.class)!=null){
                         EventBus.getDefault().post(new EventBusMessage<>("WorkListRefresh"));
                     }else{
                         Bundle bundle=new Bundle();

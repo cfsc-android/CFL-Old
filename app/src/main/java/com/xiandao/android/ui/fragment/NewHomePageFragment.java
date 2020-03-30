@@ -71,6 +71,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cz.msebera.android.httpclient.util.TextUtils;
+
 import static com.xiandao.android.base.Config.ARTICLE;
 import static com.xiandao.android.base.Config.BASE_URL;
 
@@ -111,20 +113,20 @@ public class NewHomePageFragment extends BaseLazyFragment implements View.OnClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if(FileManagement.getTokenInfo().equals("third")){
-//            bind=false;
-//            EventBus.getDefault().register(this);
-//        }else{
+
+        if(FileManagement.getUserInfoEntity().getCurrentDistrict()!=null&&!TextUtils.isEmpty(FileManagement.getUserInfoEntity().getCurrentDistrict().getRoomId())){
             bind=true;
-//        }
+        }else{
+            bind=false;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventBusMessage message){
-        if("bind".equals(message.getMessage())){
-            Log.e("bind","Home_bind");
-            bind=true;
-            EventBus.getDefault().unregister(this);
+        if("projectSelect".equals(message.getMessage())){
+            tv_project_logo_name.setText(FileManagement.getUserInfoEntity().getCurrentDistrict().getProjectName());
+            getHotTips();
+            getWheelPlanting();
         }
     }
 
@@ -198,7 +200,7 @@ public class NewHomePageFragment extends BaseLazyFragment implements View.OnClic
         });
         banner_home_ad.start();
         tv_project_logo_name= (TextView) view.findViewById(R.id.tv_project_logo_name);
-//        tv_project_logo_name.setText(FileManagement.getProjectInfo().getProjectName());
+
 //        iv_project_icon= (ImageView) view.findViewById(R.id.iv_project_icon);
 //        iv_project_icon.setImageResource(FileManagement.getProjectInfo().getProjectIcon());
     }
@@ -206,16 +208,19 @@ public class NewHomePageFragment extends BaseLazyFragment implements View.OnClic
     @Override
     protected void onFragmentStartLazy() {
         super.onFragmentStartLazy();
-        /** zxl 注释 2019-4-8*/
-//        queryNoticeList();
-//        queryTurnsAndHottopics();
+        if(FileManagement.getUserInfoEntity().getCurrentDistrict()!=null&&!TextUtils.isEmpty(FileManagement.getUserInfoEntity().getCurrentDistrict().getRoomId())){
+            bind=true;
+        }else{
+            bind=false;
+        }
+        tv_project_logo_name.setText(FileManagement.getUserInfoEntity().getCurrentDistrict().getProjectName());
         getHotTips();
         getWheelPlanting();
     }
 
     private void getHotTips(){
         Map<String,String> map=new HashMap<>();
-        map.put("projectId","ec93bb06f5be4c1f19522ca78180e2i9");
+        map.put("projectId",FileManagement.getUserInfoEntity().getCurrentDistrict().getProjectId());
         map.put("receiver", NoticeReceiverType.全部.getType()+","+NoticeReceiverType.业主.getType());
         map.put("announcementTypeId", NoticeType.热点关注.getType());
         map.put("auditStatus","1");
@@ -252,7 +257,7 @@ public class NewHomePageFragment extends BaseLazyFragment implements View.OnClic
 
     private void getWheelPlanting(){
         Map<String,String> map=new HashMap<>();
-        map.put("projectId","ec93bb06f5be4c1f19522ca78180e2i9");
+        map.put("projectId",FileManagement.getUserInfoEntity().getCurrentDistrict().getProjectId());
         map.put("receiver", NoticeReceiverType.全部.getType()+","+NoticeReceiverType.业主.getType());
         map.put("announcementTypeId", NoticeType.轮播动态.getType());
         map.put("auditStatus","1");
@@ -303,16 +308,6 @@ public class NewHomePageFragment extends BaseLazyFragment implements View.OnClic
 
             }
         });
-    }
-
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(EventBus.getDefault().isRegistered(this)){
-            EventBus.getDefault().unregister(this);
-        }
     }
 
     @Override

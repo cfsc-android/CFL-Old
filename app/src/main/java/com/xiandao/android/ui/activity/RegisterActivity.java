@@ -1,6 +1,8 @@
 package com.xiandao.android.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.pgyersdk.update.PgyUpdateManager;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -22,7 +26,10 @@ import com.xiandao.android.entity.QQLoginEntity;
 import com.xiandao.android.entity.WeiXinLoginEntity;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.smart.BaseEntity;
+import com.xiandao.android.entity.smart.CurrentDistrictEntity;
+import com.xiandao.android.entity.smart.OrderStatusEntity;
 import com.xiandao.android.entity.smart.OrderTypeListEntity;
+import com.xiandao.android.entity.smart.ProjectTreeEntity;
 import com.xiandao.android.entity.smart.SmsKeyEntity;
 import com.xiandao.android.entity.smart.TokenEntity;
 import com.xiandao.android.entity.smart.UserInfoEntity;
@@ -38,19 +45,27 @@ import com.xiandao.android.view.alertview.AlertView;
 import org.greenrobot.eventbus.EventBus;
 import org.xutils.LogUtils;
 import org.xutils.app.LynActivityManager;
+import org.xutils.common.util.LogUtil;
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.Event;
 import org.xutils.event.annotation.ViewInject;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import static com.xiandao.android.base.Config.AUTH;
 import static com.xiandao.android.base.Config.BASE_URL;
 import static com.xiandao.android.base.Config.BASIC;
 import static com.xiandao.android.base.Config.SMS;
+import static com.xiandao.android.base.Config.USER;
+import static com.xiandao.android.base.Config.WORKORDER;
 
 @ContentView(R.layout.activity_register)
 public class RegisterActivity extends BaseActivity {
@@ -66,6 +81,7 @@ public class RegisterActivity extends BaseActivity {
     private boolean verFlag;
     private int verNum=0;
     private String validKey;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +125,7 @@ public class RegisterActivity extends BaseActivity {
                 break;
             case R.id.tv_tel_get_ver:
                 if(verFlag){
-                    sendSMS();
+                    checkUnique();
                 }
                 break;
             case R.id.btn_register:
@@ -131,21 +147,39 @@ public class RegisterActivity extends BaseActivity {
         }
     }
 
-    //获取用户信息
-    private void getUserInfo(String userId){
-        XUtils.Get(BASE_URL+BASIC+"basic/householdInfo/"+userId,null,new MyCallBack<String>(){
+    //判断是否已经存在
+    private void checkUnique(){
+        startProgressDialog("");
+        Map<String,String> map=new HashMap<>();
+        map.put("fieldName","mobile");
+        map.put("fieldValue",et_tel_no.getText().toString());
+        map.put("tableName","`smart-basic`.cfc_household_info");
+        XUtils.Get(BASE_URL+USER+"sys/check/unique",map,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
                 super.onSuccess(result);
-                LogUtils.d(result);
-                BaseEntity<UserInfoEntity> baseEntity= JsonParse.parse(result,UserInfoEntity.class);
+                LogUtil.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
                 if(baseEntity.isSuccess()){
-                    FileManagement.setUserInfo(baseEntity.getResult());//缓存用户信息
-                    LynActivityManager.getScreenManager().finishActivity(LoginActivity.class);//杀掉登录界面
-                    openActivity(MainActivity.class);//跳转到主界面
-                    finish();//关闭当前页面
+                    sendSMS();
                 }else{
-                    showToast(baseEntity.getMessage());
+                    stopProgressDialog();
+                    new AlertDialog.Builder(RegisterActivity.this)
+                            .setTitle("提示")
+                            .setMessage("该号码已使用，去登录")
+                            .setCancelable(false)
+                            .setNegativeButton("确认",new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            }).
+                            setNeutralButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
                 }
             }
 
@@ -154,17 +188,187 @@ public class RegisterActivity extends BaseActivity {
                 super.onError(ex, isOnCallback);
                 showToast(ex.getMessage());
             }
+        });
+
+    }
+
+    private void initData(){
+        initOrderType();
+        initOrderStatus();
+        initComplainType();
+        initComplainStatus();
+        getUserInfo();
+    }
+
+    //初始化工单类型
+    private void initOrderType(){
+        Map<String,String> requestMap=new HashMap<>();
+        requestMap.put("pageNo","1");
+        requestMap.put("pageSize","100");
+        XUtils.Get(BASE_URL+WORKORDER+"work/orderType/pageByCondition",requestMap,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity<OrderTypeListEntity> baseEntity= JsonParse.parse(result, OrderTypeListEntity.class);
+                if(baseEntity.isSuccess()){
+                    FileManagement.setOrderType(baseEntity.getResult().getData());
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
 
             @Override
-            public void onFinished() {
-                super.onFinished();
-                stopProgressDialog();
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
             }
+
+        });
+
+    }
+    //初始化工单状态
+    private void initOrderStatus(){
+        XUtils.Get(BASE_URL+WORKORDER+"work/orderStatus/selectWorkorderStatus",null,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    Type type = new TypeToken<List<OrderStatusEntity>>() {}.getType();
+                    List<OrderStatusEntity> list= (List<OrderStatusEntity>) JsonParse.parseList(result,type);
+                    FileManagement.setOrderStatus(list);
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
+            }
+
+        });
+
+    }
+    //初始化投诉类型
+    private void initComplainType(){
+        Map<String,String> requestMap=new HashMap<>();
+        requestMap.put("pageNo","1");
+        requestMap.put("pageSize","100");
+        XUtils.Get(BASE_URL+WORKORDER+"work/complaintType/pageByCondition",requestMap,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity<OrderTypeListEntity> baseEntity= JsonParse.parse(result, OrderTypeListEntity.class);
+                if(baseEntity.isSuccess()){
+                    FileManagement.setComplainType(baseEntity.getResult().getData());
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
+            }
+
+        });
+    }
+    //初始化投诉状态
+    private void initComplainStatus(){
+        XUtils.Get(BASE_URL+WORKORDER+"work/complaintStatus/complaintStatusList",null,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    Type type = new TypeToken<List<OrderStatusEntity>>() {}.getType();
+                    List<OrderStatusEntity> list= (List<OrderStatusEntity>) JsonParse.parseList(result,type);
+                    FileManagement.setComplainStatus(list);
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
+            }
+
+        });
+    }
+    //获取用户信息
+    private void getUserInfo(){
+
+        RequestParams params=new RequestParams(BASE_URL+BASIC+"basic/householdInfo/phone");
+        params.addParameter("phoneNumber",et_tel_no.getText().toString());
+        x.http().get(params,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity<UserInfoEntity> baseEntity= JsonParse.parse(result,UserInfoEntity.class);
+                if(baseEntity.isSuccess()){
+                    FileManagement.setUserInfo(baseEntity.getResult());//缓存用户信息
+                    checkInitStatus(1);
+                }else{
+                    showToast(baseEntity.getMessage());
+                    checkInitStatus(0);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+                checkInitStatus(0);
+            }
+
+
         });
     }
 
+
+    private List<Integer> initStatus=new ArrayList<>();
+
+    private void checkInitStatus(int status){
+        initStatus.add(status);
+        if(initStatus.indexOf(0)!=-1){
+            openActivity(LoginActivity.class);
+            finish();
+        }else{
+            if(initStatus.size()==5){
+                Bundle bundle=new Bundle();
+                bundle.putString("openFrom","Register");
+                openActivity(ProjectSelectActivity.class,bundle);
+                finish();
+            }
+        }
+    }
+
+
+
     //登录
-    private void login(final String userId) {
+    private void login() {
         RequestParams params=new RequestParams(BASE_URL+AUTH+"oauth/user/household/login");
         params.addHeader("client_id","mobile");
         params.addHeader("client_secret","mobile");
@@ -179,8 +383,10 @@ public class RegisterActivity extends BaseActivity {
                 LogUtils.d(result);
                 Gson gson = new Gson();
                 TokenEntity token=gson.fromJson(result,TokenEntity.class);
+                token.setInit_time(new Date().getTime()/1000);
                 FileManagement.setTokenEntity(token);
-                getUserInfo(userId);
+                FileManagement.setPhone(et_tel_no.getText().toString());
+                initData();
             }
 
             @Override
@@ -208,9 +414,7 @@ public class RegisterActivity extends BaseActivity {
                 LogUtils.d(result);
                 BaseEntity<String> baseEntity= JsonParse.parse(result,String.class);
                 if(baseEntity.isSuccess()){
-                    String userId= baseEntity.getResult();
-                    login(userId);
-
+                    login();
                 }else{
                     showToast(baseEntity.getMessage());
                     stopProgressDialog();
@@ -364,9 +568,10 @@ public class RegisterActivity extends BaseActivity {
 
     //获取验证码
     private void sendSMS() {
-        Map<String,Object> requestMap=new HashMap<>();
-        requestMap.put("phone",et_tel_no.getText().toString());
-        XUtils.Post(BASE_URL+SMS+"sms-internal/codes",requestMap,new MyCallBack<String>(){
+        RequestParams params=new RequestParams(BASE_URL+SMS+"sms-internal/codes");
+
+        params.addBodyParameter("phone",et_tel_no.getText().toString());
+        x.http().post(params,new MyCallBack<String>(){
             @Override
             public void onSuccess(String result) {
                 super.onSuccess(result);
@@ -385,7 +590,14 @@ public class RegisterActivity extends BaseActivity {
                 super.onError(ex, isOnCallback);
                 showToast(ex.getMessage());
             }
+
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                stopProgressDialog();
+            }
         });
+
 
     }
 

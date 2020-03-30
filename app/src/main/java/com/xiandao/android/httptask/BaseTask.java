@@ -107,7 +107,7 @@ public class BaseTask extends BaseParser<Object> {
 //            if (FileManagement.getTokenEntity() == null) return null;
 //            loadRefreshToken(context);
 //        } else if (REFRESHCERTIFICATE.equals(getOsEntity().getResultCode())) {
-//            if (LynActivityManager.getScreenManager().getActivityByClass(LoginActivity.class) == null && !Tools.isFastDoubleClick(5000)) {
+//            if (LynActivityManager.getInstance().getActivityByClass(LoginActivity.class) == null && !Tools.isFastDoubleClick(5000)) {
 //                new Handler(Looper.getMainLooper()).post(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -119,7 +119,7 @@ public class BaseTask extends BaseParser<Object> {
 //            }
 //            return null;
 //        } else if (osEntity != null && code.equals(osEntity.getResultCode())) {
-//            if (LynActivityManager.getScreenManager().getActivityByClass(LoginActivity.class) == null && !Tools.isFastDoubleClick(5000)) {
+//            if (LynActivityManager.getInstance().getActivityByClass(LoginActivity.class) == null && !Tools.isFastDoubleClick(5000)) {
 //                if (FileManagement.getTokenEntity() == null) return null;
 //                loadRefreshToken(context);
 //                if (vo != null)

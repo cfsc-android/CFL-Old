@@ -51,6 +51,7 @@
             android:src="@drawable/ic_next"/>
     </LinearLayout>
     <TextView
+        android:id="@+id/room_list_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/dp_10"

@@ -351,7 +351,7 @@ public class AndroidApplication extends Application {
     public void exitApp() {
         // 杀死进程,推出整个应用
         threadPoolManager.stopAllTask();
-        LynActivityManager.getScreenManager().removeAllActivity();
+        LynActivityManager.getInstance().removeAllActivity();
         int sdk = Integer.parseInt(android.os.Build.VERSION.SDK);
         if (sdk <= 10) {
             System.exit(0);

@@ -60,9 +60,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.ProjectManageActivity"></activity>
+        <activity android:name=".ui.activity.HouseholdAuditListActivity"></activity>
+        <activity android:name=".ui.activity.FaceCollectionPhotoActivity" />
+        <activity android:name=".ui.activity.HouseholdAuditActivity" />
+        <activity android:name=".ui.activity.HouseholdTypeSelectActivity" />
+        <activity android:name=".ui.activity.RoomSelectActivity" />
+        <activity android:name=".ui.activity.UnitSelectActivity" />
+        <activity android:name=".ui.activity.ProjectSelectActivity" />
         <activity android:name=".ui.activity.OtherRoomDetailActivity" />
-        <activity android:name=".ui.HouseholdFaceActivity" />
+        <activity android:name=".ui.activity.HouseholdFaceActivity" />
         <activity android:name=".ui.activity.WorkflowListActivity" />
         <activity android:name=".ui.activity.UnLockListActivity" />
         <activity android:name=".ui.activity.WorkflowStepActivity" />
@@ -279,7 +285,9 @@
         <activity
             android:name=".ui.activity.WaitingForDevelopmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" /> <!-- 友盟 -->
+            android:screenOrientation="portrait" />
+
+        <!-- 友盟 -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -298,6 +306,7 @@
                 <data android:scheme="tencent101569547" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

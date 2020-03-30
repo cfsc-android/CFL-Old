@@ -3,6 +3,7 @@ package com.xiandao.android.ui.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import com.xiandao.android.entity.ThirdInfoEntity;
 import com.xiandao.android.entity.WeiXinLoginEntity;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.smart.BaseEntity;
+import com.xiandao.android.entity.smart.CurrentDistrictEntity;
 import com.xiandao.android.entity.smart.OrderStatusEntity;
 import com.xiandao.android.entity.smart.OrderTypeListEntity;
 import com.xiandao.android.entity.smart.SmsKeyEntity;
@@ -633,7 +635,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void checkInitStatus(int status){
         initStatus.add(status);
         if(initStatus.indexOf(0)==-1&&initStatus.size()==5){
-            openActivity(MainActivity.class);
+
+            CurrentDistrictEntity currentDistrict = FileManagement.getUserInfoEntity().getCurrentDistrict();
+            if(currentDistrict!=null && !TextUtils.isEmpty(currentDistrict.getProjectId())){
+                openActivity(MainActivity.class);
+            }else{
+                Bundle bundle=new Bundle();
+                bundle.putString("openFrom","Login");
+                openActivity(ProjectSelectActivity.class,bundle);
+            }
             finish();
         }
     }

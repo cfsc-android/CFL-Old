@@ -17,16 +17,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.google.gson.Gson;
 import com.xiandao.android.R;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.hikcloud.VideoCallPush;
+import com.xiandao.android.entity.smart.CurrentDistrictEntity;
+import com.xiandao.android.entity.smart.WorkflowType;
 import com.xiandao.android.ui.BaseActivity;
 import com.xiandao.android.ui.fragment.FindFragment;
 import com.xiandao.android.ui.fragment.NewHomePageFragment;
@@ -41,6 +48,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
+import org.xutils.LogUtils;
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.Event;
 import org.xutils.event.annotation.ViewInject;
@@ -73,7 +81,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @ViewInject(R.id.rg_main)
     private RadioGroup rg_main;
-
+    @ViewInject(R.id.rb_home)
+    private RadioButton rb_home;
+    @ViewInject(R.id.rb_mine)
+    private RadioButton rb_mine;
 
 
     /**
@@ -178,36 +189,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if(FileManagement.getTokenInfo().equals("third")){
-//            bind=false;
-//            telBindDialog();
-//            EventBus.getDefault().register(this);
-//        }else{
-//            bind=true;
-//            registerJPush();
-//        }
+        CurrentDistrictEntity currentDistrict=FileManagement.getUserInfoEntity().getCurrentDistrict();
+        if(currentDistrict!=null&&!TextUtils.isEmpty(currentDistrict.getRoomId())){
+            bind=true;
+        }else{
+            bind=false;
+        }
         init();
         getPromiss();
+        EventBus.getDefault().register(this);
+        if(TextUtils.isEmpty(currentDistrict.getRoomId())){
+            showUnBindView();
+        }
     }
 
-    private void telBindDialog(){
-        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
-        dialog.setTitle("绑定业主");
-        dialog.setMessage("未绑定业主，APP部分功能受限制！");
-        dialog.setCancelable(false);
-        dialog.setNegativeButton("稍后绑定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setPositiveButton("前往绑定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                openActivity(PersonalTelBindActivity.class);
-            }
-        });
-        dialog.create().show();
+    private void showUnBindView(){
+        View unSelectView= LayoutInflater.from(this).inflate(R.layout.dialog_unselect_room,null);
+        Button selectBtn=unSelectView.findViewById(R.id.btn_select_room);
+        selectBtn.setOnClickListener(this);
+        Button unSelectBtn=unSelectView.findViewById(R.id.btn_un_select_room);
+        unSelectBtn.setOnClickListener(this);
+        ImageView closeBtn=unSelectView.findViewById(R.id.iv_un_select_room);
+        closeBtn.setOnClickListener(this);
+        startCustomerDialog(unSelectView,false);
     }
 
     private void getPromiss(){
@@ -287,38 +291,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
-    private void registerJPush(){
-        registerMessageReceiver();  // used for receive msg
-
-        // 初始化 JPush。如果已经初始化，但没有登录成功，则执行重新登录。
-        JPushInterface.init(getApplicationContext());
-
-        if (Tools.isEmpty(FileManagement.getJpushAlias())) {
-            //调用JPush API设置Alias  "YG000" + loginUserEntity.getUserId()
-            /** zxl 注释 2019-4-8 */
-            Log.e("+++++++++++++++++++++","ZH000" + loginUserEntity.getUserId());
-            FileManagement.saveJpushAlias("ZH000" + loginUserEntity.getUserId());
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, FileManagement.getJpushAlias()));
-        }
-        if(Tools.isEmpty(FileManagement.getJpushTags())){
-            FileManagement.saveJpushTags(FileManagement.getProjectInfo().getjPushTag());
-            String tags = FileManagement.getJpushTags();
-            Log.e("getJpushTags",tags);
-            Set<String> tagSet = new LinkedHashSet<>();
-            // ","隔开的多个 转换成 Set
-            String[] sArray = tags.split(",");
-            for (String sTagItme : sArray) {
-                if (!JpushUtil.isValidTagAndAlias(sTagItme)) {
-                    Tools.showPrompt("格式不对");
-                    return;
-                }
-                tagSet.add(sTagItme);
-            }
-            //调用JPush API设置Tag
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_TAGS, tagSet));
-        }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventBusMessage message){
         if("bind".equals(message.getMessage())){
@@ -327,7 +299,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //            registerJPush();
             EventBus.getDefault().unregister(this);
         }else if("unbind".equals(message.getMessage())){
-            telBindDialog();
+            LogUtils.d("============================="+"unbind"+"==========================");
+            showUnBindView();
+        }else if("projectSelect".equals(message.getMessage())){
+            changeView(0);
         }
     }
 
@@ -335,7 +310,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void onClickEvent(View v){
         switch (v.getId()){
             case R.id.main_btn_unlock:
-                openActivity(UnLockListActivity.class);
+                if(bind){
+                    openActivity(UnLockListActivity.class);
+                }else{
+                    EventBus.getDefault().post(new EventBusMessage<>("unbind"));
+                }
                 break;
         }
     }
@@ -364,6 +343,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.ll_mine1:
                 changeView(1);
                 break;
+            case R.id.btn_select_room:
+                openActivity(HouseHoldActivity.class);
+                stopProgressDialog();
+                break;
+            case R.id.btn_un_select_room:
+                stopProgressDialog();
+                break;
+            case R.id.iv_un_select_room:
+                stopProgressDialog();
+                break;
+
         }
     }
 
@@ -406,6 +396,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     //手动设置ViewPager要显示的视图
     private void changeView(int desTab) {
         vpContent.setCurrentItem(desTab, true);
+        imageMove(desTab);
     }
 
     /**
@@ -415,7 +406,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      *                  第一个导航按钮对应0，第二个对应1，以此类推
      */
     private void imageMove(int moveToTab) {
-        rg_main.check(moveToTab);
+//        rg_main.check(moveToTab);
+        switch (moveToTab){
+            case 0:
+                rb_home.setChecked(true);
+                break;
+            case 1:
+                rb_mine.setChecked(true);
+                break;
+        }
     }
 //    private void imageMove(int moveToTab) {
 //        //选中全部

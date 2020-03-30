@@ -19,6 +19,8 @@ import com.xiandao.android.entity.PersonalInfomation;
 import com.xiandao.android.entity.RoomInfoEntity;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.eventbus.NickNameEventBusData;
+import com.xiandao.android.entity.smart.CurrentDistrictEntity;
+import com.xiandao.android.entity.smart.HouseholdRoomEntity;
 import com.xiandao.android.entity.smart.WorkflowType;
 import com.xiandao.android.ui.BaseLazyFragment;
 import com.xiandao.android.ui.activity.CarManageActivity;
@@ -49,6 +51,7 @@ import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class NewMineFragment extends BaseLazyFragment implements View.OnClickListener {
     private ImageView iv_new_mine_head;
@@ -63,12 +66,11 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if(FileManagement.getTokenInfo().equals("third")){
-//            bind=false;
-//        }else{
+        if(FileManagement.getUserInfoEntity().getCurrentDistrict()!=null&&!cz.msebera.android.httpclient.util.TextUtils.isEmpty(FileManagement.getUserInfoEntity().getCurrentDistrict().getRoomId())){
             bind=true;
-//        }
-        EventBus.getDefault().register(this);
+        }else{
+            bind=false;
+        }
     }
 
     @Override
@@ -77,48 +79,44 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
         setContentView(view);
         initView(view);
 //        initData();
-        if(!TextUtils.isEmpty(FileManagement.getUserInfoEntity().getAvatarResource())){
+        tv_new_mine_address.setTextColor(getResources().getColor(R.color.white));
+    }
+
+    @Override
+    protected void onFragmentStartLazy() {
+        super.onFragmentStartLazy();
+        CurrentDistrictEntity currentDistrict=FileManagement.getUserInfoEntity().getCurrentDistrict();
+        if(currentDistrict!=null&&!TextUtils.isEmpty(currentDistrict.getRoomId())){
+            bind=true;
+        }else{
+            bind=false;
+        }
+        if(TextUtils.isEmpty(currentDistrict.getRoomId())){
+            tv_new_mine_address.setText("游客");
+        }else{
+            tv_new_mine_address.setText(currentDistrict.getBuildingName()+currentDistrict.getUnitName()+currentDistrict.getRoomName());
+        }
+        if(FileManagement.getUserInfoEntity().getAvatarResource()!=null){
             Glide.with(this)
-                    .load(FileManagement.getUserInfoEntity().getAvatarResource())
+                    .load(FileManagement.getUserInfoEntity().getAvatarResource().getUrl())
                     .error(R.drawable.ic_default_img)
                     .circleCrop()
                     .into(iv_new_mine_head);
         }
         tv_new_mine_name.setText(FileManagement.getUserInfoEntity().getNickName());
-        tv_new_mine_address.setText(FileManagement.getUserInfoEntity().getAncestor());
-        tv_new_mine_address.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void initData(){
-        /** 测试人脸采集 zxl 2019-4-8 */
-        if(!bind){
-            if(FileManagement.getLoginType().equals("wx")){
-                XUtilsImageUtils.display(iv_new_mine_head,
-                        FileManagement.getWXLogin().getIconurl(),
-                        true);
-                /** 注释 zxl 2019-4-8 */
-                tv_new_mine_name.setText(FileManagement.getWXLogin().getName());
-            }else{
-                XUtilsImageUtils.display(iv_new_mine_head,
-                        FileManagement.getQQLogin().getIconurl(),
-                        true);
-                /** 注释 zxl 2019-4-8 */
-                tv_new_mine_name.setText(FileManagement.getQQLogin().getName());
-            }
-            tv_new_mine_address.setText("未绑定业主，无法获取房屋信息");
-            tv_new_mine_address.setTextColor(getResources().getColor(R.color.payment_btn));
-        }else{
-            userEntity = FileManagement.getLoginUserEntity();
-            roomInfoEntity = FileManagement.getRoomInfo();
-            if (userEntity != null) {
-                XUtilsImageUtils.display(iv_new_mine_head,
-                        Constants.BASEHOST+userEntity.getHeadImageUrl(),
-                        true);
-                tv_new_mine_name.setText(userEntity.getNickName());
-            }
-            tv_new_mine_address.setText(FileManagement.getUserInfoEntity().getAncestor());
-            tv_new_mine_address.setTextColor(getResources().getColor(R.color.white));
+        userEntity = FileManagement.getLoginUserEntity();
+        roomInfoEntity = FileManagement.getRoomInfo();
+        if (userEntity != null) {
+            XUtilsImageUtils.display(iv_new_mine_head,
+                    Constants.BASEHOST+userEntity.getHeadImageUrl(),
+                    true);
+            tv_new_mine_name.setText(userEntity.getNickName());
         }
+        tv_new_mine_address.setText(FileManagement.getUserInfoEntity().getAncestor());
+        tv_new_mine_address.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void initView(View view) {
@@ -204,9 +202,9 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
                 startActivity(new Intent(getActivity(), WaitingForDevelopmentActivity.class).putExtra("title", "账单明细"));
                 break;
             case R.id.tv_new_nime_wallet:
-//                openActivity(CommentActivity.class);
+                openActivity(CommentActivity.class);
 //                startActivity(new Intent(getActivity(), WaitingForDevelopmentActivity.class).putExtra("title", "评价"));
-                openActivity(HouseHoldActivity.class);
+
                 break;
             case R.id.tv_new_mine_data:
                 openActivity(PersonalInformationActivity.class);
@@ -222,12 +220,13 @@ public class NewMineFragment extends BaseLazyFragment implements View.OnClickLis
 //                openActivity(MyReceivingAddressActivity.class);
 //                break;
             case R.id.tv_new_mine_face:
+                openActivity(HouseHoldActivity.class);
 //                openActivity(FaceCollectionActivity.class);
-                if(bind){
-                    openActivity(FaceCollectionListActivity.class);
-                }else{
-                    EventBus.getDefault().post(new EventBusMessage<>("unbind"));
-                }
+//                if(bind){
+//                    openActivity(FaceCollectionListActivity.class);
+//                }else{
+//                    EventBus.getDefault().post(new EventBusMessage<>("unbind"));
+//                }
                 break;
             case R.id.tv_new_mine_express:
                 openActivity(ExpressSearchActivity.class);

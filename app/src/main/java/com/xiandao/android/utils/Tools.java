@@ -159,9 +159,9 @@ public class Tools {
      */
     public static Context getUiContext() {
         Context context = null;
-        if (LynActivityManager.getScreenManager().currentActivity() != null) {
-            if (LynActivityManager.getScreenManager().currentActivity() instanceof BaseActivity) {
-                BaseActivity activity = (BaseActivity) LynActivityManager.getScreenManager().currentActivity();
+        if (LynActivityManager.getInstance().currentActivity() != null) {
+            if (LynActivityManager.getInstance().currentActivity() instanceof BaseActivity) {
+                BaseActivity activity = (BaseActivity) LynActivityManager.getInstance().currentActivity();
                 context = (Context) activity;
             }
         }

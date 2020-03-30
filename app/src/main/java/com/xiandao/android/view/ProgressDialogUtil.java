@@ -123,6 +123,22 @@ public class ProgressDialogUtil {
 //        closeLockScreen();
     }
 
+
+    public void startCustomerLoad(Context context,View v,boolean cancelable){
+        if (progressDialog != null) {
+            stopLoad();
+        }
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(context, R.style.customer_dialog);
+
+            progressDialog.show();
+            progressDialog.setContentView(v, new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            progressDialog.setCancelable(cancelable);
+        }
+    }
+
 //    /**
 //     * @param message
 //     * @方法说明:设置加载内容

@@ -109,13 +109,55 @@ public class XUtils {
         return x.http().request(HttpMethod.PUT,params, callback);
     }
 
+    /**
+     * 发送异步put请求
+     *
+     * @param <T>
+     */
+    public static <T> Callback.Cancelable PutNormal(String url, Map<String, Object> map, Callback.CommonCallback<T> callback) {
+        LogUtil.d(url);
+        RequestParams params = new RequestParams(url);
+        params=addAuthorization(params);
+        if (null != map) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                params.addParameter(entry.getKey(), entry.getValue());
+            }
+        }
+        Map<String,String> headers=params.getHeaders();
+        for (Map.Entry<String,String> entry:headers.entrySet()) {
+            LogUtil.d(entry.getKey()+"-"+entry.getValue());
+        }
+        return x.http().request(HttpMethod.PUT,params, callback);
+    }
+
+
+    /**
+     * 发送异步put请求
+     *
+     * @param <T>
+     */
+    public static <T> Callback.Cancelable Delete(String url, Map<String, Object> map, Callback.CommonCallback<T> callback) {
+        LogUtil.d(url);
+        RequestParams params = new RequestParams(url);
+        params=addAuthorization(params);
+        if (null != map) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                params.addParameter(entry.getKey(), entry.getValue());
+            }
+        }
+        Map<String,String> headers=params.getHeaders();
+        for (Map.Entry<String,String> entry:headers.entrySet()) {
+            LogUtil.d(entry.getKey()+"-"+entry.getValue());
+        }
+        return x.http().request(HttpMethod.DELETE,params, callback);
+    }
 
     private static RequestParams addAuthorization(RequestParams params){
 //        if(Config.ENV.equals("release")){
             TokenEntity tokenEntity = FileManagement.getTokenEntity();
             if(tokenEntity!=null){
-//                params.addHeader("Authorization","bearer "+tokenEntity.getAccess_token());
-                params.addHeader("test","bearer "+tokenEntity.getAccess_token());
+                params.addHeader("Authorization","bearer "+tokenEntity.getAccess_token());
+//                params.addHeader("test","bearer "+tokenEntity.getAccess_token());
             }
 //        }
         return params;

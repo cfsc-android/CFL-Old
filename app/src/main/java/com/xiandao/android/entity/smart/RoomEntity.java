@@ -65,8 +65,8 @@ public class RoomEntity implements Serializable {
     private String number;
     private String floorNo;
     private String roomNo;
-    private int propertySpace;
-    private int usingArea;
+    private double propertySpace;
+    private double usingArea;
     private String paymentMode;
     private String paymentModeDisplay;
     private String checkinStatus;
@@ -179,19 +179,19 @@ public class RoomEntity implements Serializable {
         this.roomNo = roomNo;
     }
 
-    public int getPropertySpace() {
+    public double getPropertySpace() {
         return propertySpace;
     }
 
-    public void setPropertySpace(int propertySpace) {
+    public void setPropertySpace(double propertySpace) {
         this.propertySpace = propertySpace;
     }
 
-    public int getUsingArea() {
+    public double getUsingArea() {
         return usingArea;
     }
 
-    public void setUsingArea(int usingArea) {
+    public void setUsingArea(double usingArea) {
         this.usingArea = usingArea;
     }
 

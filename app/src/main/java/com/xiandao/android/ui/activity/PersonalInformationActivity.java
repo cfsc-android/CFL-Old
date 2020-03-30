@@ -44,7 +44,10 @@ import com.xiandao.android.entity.WeiXinLoginEntity;
 import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.eventbus.FaceCollectionEventBusData;
 import com.xiandao.android.entity.eventbus.NickNameEventBusData;
+import com.xiandao.android.entity.smart.BaseEntity;
+import com.xiandao.android.entity.smart.FileEntity;
 import com.xiandao.android.entity.smart.UserInfoEntity;
+import com.xiandao.android.http.JsonParse;
 import com.xiandao.android.http.MyCallBack;
 import com.xiandao.android.http.XUtils;
 import com.xiandao.android.net.ApiHttpResult;
@@ -72,11 +75,13 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.app.LynActivityManager;
 import org.xutils.common.util.LogUtil;
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.Event;
 import org.xutils.event.annotation.ViewInject;
 import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -97,6 +102,7 @@ import top.zibin.luban.OnCompressListener;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.xiandao.android.base.Config.BASE_URL;
+import static com.xiandao.android.base.Config.BASIC;
 import static com.xiandao.android.base.Config.FILE;
 import static com.xiandao.android.base.Config.PHOTO_DIR_NAME;
 import static com.xiandao.android.base.Config.SD_APP_DIR_NAME;
@@ -143,27 +149,16 @@ public class PersonalInformationActivity extends BaseActivity {
     private static final String[] permission={Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static final int REQUEST_CODE_CHOOSE=0x001;
 
-    private LoginUserEntity personal;
     private UserInfoEntity userInfo;
-    private ArrayList<RoomInfoEntity> roomInfoEntity;
-    private ArrayList<TImage> tImages = new ArrayList<>();// 添加图片集合
-    private ArrayList<File> files = new ArrayList<>();
     private int sexChoice=-1;
     private BirthWheelDialog wheeldialog;
     private boolean editFlag=false;
-    private AlertDialog thirdBindDialog;
-    private View dialogView;
-    private ImageView qq_img,wx_img;
-    private TextView qq_name,wx_name,qq_cancel,wx_cancel;
-    private String resourceKey;
     private boolean permissionFlag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tv_title_name.setText("个人资料");
         EventBus.getDefault().register(this);
-        userInfo=FileManagement.getUserInfoEntity();
-        resourceKey= UUID.randomUUID().toString().replaceAll("-","");
         initView();
         PermissionsUtils.getInstance().checkPermissions(this, permission, new PermissionsUtils.IPermissionsResult() {
             @Override
@@ -182,10 +177,11 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private void initView(){
         editFlag=true;
-        if(!Tools.isEmpty(userInfo.getAvatarResource())){
+        userInfo=FileManagement.getUserInfoEntity();
+        if(userInfo.getAvatarResource()!=null){
             rl_personal_pic.setVisibility(VISIBLE);
             tv_personal_pic.setVisibility(GONE);
-            XUtilsImageUtils.display(iv_personal_pic,userInfo.getAvatarResource(),ImageView.ScaleType.CENTER_INSIDE);
+            XUtilsImageUtils.display(iv_personal_pic,userInfo.getAvatarResource().getUrl(),ImageView.ScaleType.CENTER_INSIDE);
         }else{
             rl_personal_pic.setVisibility(GONE);
             tv_personal_pic.setVisibility(VISIBLE);
@@ -195,8 +191,8 @@ public class PersonalInformationActivity extends BaseActivity {
         iv_personal_tel_set.setVisibility(GONE);
         tv_personal_sex.setText(getSex());
         tv_personal_birth.setText(userInfo.getBirthday());
-        if (userInfo.getRoomList() != null && userInfo.getRoomList().size() > 0) {
-            tv_personal_address.setText(userInfo.getAncestor());
+        if (TextUtils.isEmpty(userInfo.getCurrentDistrict().getRoomId())) {
+            tv_personal_address.setText(userInfo.getCurrentDistrict().getBuildingName()+userInfo.getCurrentDistrict().getUnitName()+userInfo.getCurrentDistrict().getRoomName());
         }else{
             tv_personal_address.setText("");
         }
@@ -206,137 +202,63 @@ public class PersonalInformationActivity extends BaseActivity {
         ll_personal_third_bind_ll.setVisibility(VISIBLE);
     }
 
-    private void init(){
-        if(FileManagement.getTokenInfo().equals("third")){
-            editFlag=false;
-            rl_personal_pic.setVisibility(VISIBLE);
-            tv_personal_pic.setVisibility(GONE);
-            iv_personal_pic_set.setVisibility(GONE);
-            if(FileManagement.getLoginType().equals("wx")){
-                XUtilsImageUtils.display(iv_personal_pic,FileManagement.getWXLogin().getIconurl(),ImageView.ScaleType.CENTER_INSIDE);
-                tv_personal_nick_name.setText(FileManagement.getWXLogin().getName());
-                tv_personal_sex.setText(FileManagement.getWXLogin().getGender());
-            }else{
-                XUtilsImageUtils.display(iv_personal_pic,FileManagement.getQQLogin().getIconurl(),ImageView.ScaleType.CENTER_INSIDE);
-                tv_personal_nick_name.setText(FileManagement.getQQLogin().getName());
-                tv_personal_sex.setText(FileManagement.getQQLogin().getGender());
-            }
-            iv_personal_nick_name_set.setVisibility(GONE);
-            iv_personal_sex_set.setVisibility(GONE);
-            tv_personal_birth.setText("");
-            iv_personal_birth_set.setVisibility(GONE);
-            tv_personal_tel.setText("");
-            iv_personal_tel_set.setVisibility(GONE);
-            ll_personal_tel_bind_ll.setVisibility(VISIBLE);
-            ll_personal_third_bind_ll.setVisibility(GONE);
-        }else{
-            editFlag=true;
-            personal=FileManagement.getLoginUserEntity();
-            roomInfoEntity = FileManagement.getRoomInfo();
-            if(!Tools.isEmpty(personal.getHeadImageUrl())){
-                rl_personal_pic.setVisibility(VISIBLE);
-                tv_personal_pic.setVisibility(GONE);
-                XUtilsImageUtils.display(iv_personal_pic,Constants.BASEHOST+personal.getHeadImageUrl(),ImageView.ScaleType.CENTER_INSIDE);
-            }else{
-                rl_personal_pic.setVisibility(GONE);
-                tv_personal_pic.setVisibility(VISIBLE);
-            }
-            tv_personal_nick_name.setText(personal.getNickName());
-            tv_personal_tel.setText(personal.getMobileNumber());
-            iv_personal_tel_set.setVisibility(GONE);
-            tv_personal_sex.setText(getSex());
-            tv_personal_birth.setText("");
-            if (roomInfoEntity != null && roomInfoEntity.size() > 0) {
-                tv_personal_address.setText(Tools.getStringValue(roomInfoEntity.get(0).getAddress()));
-            }else{
-                tv_personal_address.setText("");
-            }
-            tv_personal_in_date.setText("");
-            tv_personal_housing_mode.setText("");
-            ll_personal_tel_bind_ll.setVisibility(GONE);
-            ll_personal_third_bind_ll.setVisibility(VISIBLE);
-            getPersonalInfo();
-        }
-
-    }
-
-    private void getPersonalInfo(){
-        startProgressDialog("");
-        XUtils.Get(Constants.HOST+"/owner/getOwnerInfo.action?userId="+personal.getUserId(),null,new MyCallBack<String>(){
-            @Override
-            public void onSuccess(String result) {
-                super.onSuccess(result);
-                Log.e("getPersonalInfo",result);
-                try {
-                    JSONObject jsonObject=new JSONObject(result);
-                    if("0".equals(jsonObject.getString("resultCode"))){
-                        Gson gson=new Gson();
-                        PersonalInfomation personalInfomation=gson.fromJson(jsonObject.getString("data"),PersonalInfomation.class);
-                        tv_personal_birth.setText(personalInfomation.getBirthday());
-                        tv_personal_in_date.setText(personalInfomation.getCheckindate());
-                        tv_personal_housing_mode.setText(getLiveMode(personalInfomation.getLivemode()));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                super.onError(ex, isOnCallback);
-                showShortToast(ex.getMessage());
-            }
-
-            @Override
-            public void onFinished() {
-                super.onFinished();
-                stopProgressDialog();
-            }
-        });
-    }
-
-    private void editPersonalInfo(RequestParams params, final OnEditSuccessLisener lisener){
-        startProgressDialog("");
-        params.addBodyParameter("ownerid",personal.getUserId());
-        XUtils.UploadFile(params,new MyCallBack<String>(){
-            @Override
-            public void onSuccess(String result) {
-                super.onSuccess(result);
-                Log.e("result",result);
-                try {
-                    JSONObject jsonObject=new JSONObject(result);
-                    if("0".equals(jsonObject.getString("resultCode"))){
-                        Gson gson=new Gson();
-                        PersonalInfomation personalInfomation=gson.fromJson(jsonObject.getString("data"),PersonalInfomation.class);
-                        personal.setHeadImageUrl(personalInfomation.getFace());
-                        personal.setNickName(personalInfomation.getNickname());
-                        personal.setGender(personalInfomation.getGender()+"");
-                        FileManagement.setBaseUser(personal);
-                        lisener.onEditSuccess(personalInfomation);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                super.onError(ex, isOnCallback);
-                showShortToast(ex.getMessage());
-            }
-
-            @Override
-            public void onFinished() {
-                super.onFinished();
-                stopProgressDialog();
-            }
-        });
-    }
-
     private void editPersonalInfo(Map<String,Object> map){
-        for (Map.Entry<String,Object> entry: map.entrySet()) {
-            LogUtil.d(entry.getKey()+":"+entry.getValue());
-        }
+        map.put("id",FileManagement.getUserInfoEntity().getId());
+        startProgressDialog("");
+        XUtils.Put(BASE_URL+BASIC+"basic/householdInfo/specificField",map,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity baseEntity= JsonParse.parse(result);
+                if(baseEntity.isSuccess()){
+                    getUserInfo();
+                }else{
+                    showToast(baseEntity.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+            }
+
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                stopProgressDialog();
+            }
+        });
+
+    }
+
+
+    private void getUserInfo(){
+        RequestParams params=new RequestParams(BASE_URL+BASIC+"basic/householdInfo/phone");
+        params.addParameter("phoneNumber",FileManagement.getPhone());
+        x.http().get(params,new MyCallBack<String>(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                LogUtils.d(result);
+                BaseEntity<UserInfoEntity> baseEntity= JsonParse.parse(result,UserInfoEntity.class);
+                if(baseEntity.isSuccess()){
+                    FileManagement.setUserInfo(baseEntity.getResult());//缓存用户信息
+                    initView();
+                }else{
+                    showToast(baseEntity.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                showToast(ex.getMessage());
+            }
+
+
+        });
     }
 
     private String getSex(){
@@ -351,39 +273,12 @@ public class PersonalInformationActivity extends BaseActivity {
         return sex;
     }
 
-    private String getLiveMode(String mode){
-        String result="";
-        if("1".equals(mode)){
-            result="单身居住";
-        }else if("2".equals(mode)){
-            result="合伙居住";
-        }else if("3".equals(mode)){
-            result="家庭居住";
-        }else if("4".equals(mode)){
-            result="集体居住";
-        }else if("99".equals(mode)){
-            result="其它";
-        }
-        return result;
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(EventBusMessage message){
+    public void Event(final EventBusMessage message){
         if("nickName".equals(message.getMessage())){
-            Map<String,Object> map=new HashMap<>();
-            map.put("nickname",((NickNameEventBusData)message.getData()).getNickName());
+            final Map<String,Object> map=new HashMap<>();
+            map.put("nickName",((NickNameEventBusData)message.getData()).getNickName());
             editPersonalInfo(map);
-//            RequestParams params=new RequestParams(Constants.HOST+Constants.EDITPERSONALINFORMATION);
-//            params.addBodyParameter("nickname",);
-//            editPersonalInfo(params, new OnEditSuccessLisener() {
-//                @Override
-//                public void onEditSuccess(PersonalInfomation personalInfomation) {
-//                    tv_personal_nick_name.setText(personalInfomation.getNickname());
-//                }
-//            });
-        }else if("bind".equals(message.getMessage())){
-            Log.e("bind","Personal_bind");
-            init();
         }
     }
 
@@ -405,20 +300,11 @@ public class PersonalInformationActivity extends BaseActivity {
                 if(editFlag){
                     wheeldialog = new BirthWheelDialog(this, R.style.Dialog_Floating, new BirthWheelDialog.OnDateTimeConfirm() {
                         @Override
-                        public void returnData(String dateText, String dateValue) {
+                        public void returnData(final String dateText, String dateValue) {
                             wheeldialog.cancel();
                             Map<String,Object> map=new HashMap<>();
-                            map.put("birthday",dateText);
+                            map.put("birthday",dateText+" 00:00:00");
                             editPersonalInfo(map);
-//
-//                            RequestParams params=new RequestParams(Constants.HOST+Constants.EDITPERSONALINFORMATION);
-//                            params.addBodyParameter("birthday",dateText);
-//                            editPersonalInfo(params, new OnEditSuccessLisener() {
-//                                @Override
-//                                public void onEditSuccess(PersonalInfomation personalInfomation) {
-//                                    tv_personal_birth.setText(personalInfomation.getBirthday());
-//                                }
-//                            });
                         }
                     });
                     wheeldialog.show();
@@ -447,11 +333,9 @@ public class PersonalInformationActivity extends BaseActivity {
                 break;
             case R.id.ll_personal_third_bind:
                 showShortToast("敬请期待");
-                //thirdBindDialogShow();
                 break;
             case R.id.ll_personal_tel_bind:
                 showShortToast("待开发");
-                //openActivity(PersonalTelBindActivity.class);
                 break;
         }
     }
@@ -480,269 +364,18 @@ public class PersonalInformationActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-
                 Map<String,Object> map=new HashMap<>();
-                map.put("gender",(sexChoice+1)+"");
+                map.put("gender",sexChoice+1);
                 editPersonalInfo(map);
-
-//                RequestParams params=new RequestParams(Constants.HOST+Constants.EDITPERSONALINFORMATION);
-//                params.addBodyParameter("gender",(sexChoice+1)+"");
-//                editPersonalInfo(params, new OnEditSuccessLisener() {
-//                    @Override
-//                    public void onEditSuccess(PersonalInfomation personalInfomation) {
-//                        tv_personal_sex.setText(personalInfomation.getGender()==1?"男":"女");
-//                    }
-//                });
 
             }
         });
         builder.create().show();
     }
 
-    private void thirdBindDialogShow(){
-        if(thirdBindDialog==null){
-            initDialogView();
-            AlertDialog.Builder customerDialog= new AlertDialog.Builder(PersonalInformationActivity.this);
-            customerDialog.setTitle("绑定QQ/微信");
-            customerDialog.setView(dialogView);
-            customerDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            thirdBindDialog=customerDialog.create();
-        }
-        thirdBindDialog.show();
-    }
-
-    private void initDialogView(){
-        if(dialogView==null){
-            dialogView=LayoutInflater.from(PersonalInformationActivity.this)
-                    .inflate(R.layout.dialog_personal_third_bind,null);
-            qq_img= (ImageView) dialogView.findViewById(R.id.iv_dialog_third_bind_qq);
-            qq_img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    thirdBind(SHARE_MEDIA.QQ);
-                }
-            });
-            wx_img= (ImageView) dialogView.findViewById(R.id.iv_dialog_third_bind_wx);
-            wx_img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    thirdBind(SHARE_MEDIA.WEIXIN);
-                }
-            });
-            qq_name= (TextView) dialogView.findViewById(R.id.tv_dialog_third_bind_qq);
-            wx_name= (TextView) dialogView.findViewById(R.id.tv_dialog_third_bind_wx);
-            qq_cancel= (TextView) dialogView.findViewById(R.id.tv_dialog_third_bind_qq_cancel);
-            qq_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    thirdUnBind(SHARE_MEDIA.QQ);
-                    thirdUnToTelBind("1");
-                }
-            });
-            wx_cancel= (TextView) dialogView.findViewById(R.id.tv_dialog_third_bind_wx_cancel);
-            wx_cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    thirdUnBind(SHARE_MEDIA.WEIXIN);
-                    thirdUnToTelBind("0");
-                }
-            });
-        }
-        boolean wx_bind=false,qq_bind=false;
-        ArrayList<ThirdInfoEntity> thirdInfoEntities=FileManagement.getThirdInfo();
-        if(thirdInfoEntities!=null&&thirdInfoEntities.size()>0){
-            for (ThirdInfoEntity thirdInfoEntity : thirdInfoEntities) {
-                if(thirdInfoEntity.getType().equals("0")){
-                    wx_bind=true;
-                    XUtilsImageUtils.display(wx_img,thirdInfoEntity.getFaceImg(),true);
-                    wx_name.setText(thirdInfoEntity.getNickname());
-                }else if(thirdInfoEntity.getType().equals("1")){
-                    qq_bind=true;
-                    XUtilsImageUtils.display(qq_img,thirdInfoEntity.getFaceImg(),true);
-                    qq_name.setText(thirdInfoEntity.getNickname());
-                }
-            }
-        }
-        if(wx_bind){
-            wx_cancel.setVisibility(VISIBLE);
-        }else{
-            wx_img.setImageResource(R.drawable.umeng_socialize_wechat);
-            wx_name.setText("微信");
-            wx_cancel.setVisibility(GONE);
-        }
-        if(qq_bind){
-            qq_cancel.setVisibility(VISIBLE);
-        }else{
-            qq_img.setImageResource(R.drawable.umeng_socialize_qq);
-            qq_name.setText("QQ");
-            qq_cancel.setVisibility(GONE);
-        }
-    }
-
-    private void thirdBind(SHARE_MEDIA shareMedia){
-        startProgressDialog("授权中...");
-        UMShareAPI.get(PersonalInformationActivity.this).getPlatformInfo(PersonalInformationActivity.this, shareMedia, new UMAuthListener(){
-            @Override
-            public void onStart(SHARE_MEDIA share_media) {
-                Log.d("LoginActivity", share_media.toString()+" onStart 授权开始");
-            }
-
-            @Override
-            public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                Log.d("LoginActivity", share_media.toString()+i+" onComplete 授权完成");
-                StringBuilder str=new StringBuilder();
-                str.append("{");
-                for (Map.Entry<String, String> entry : map.entrySet()) {
-                    str.append("\""+entry.getKey()+"\":\""+entry.getValue()+"\",");
-                }
-                String thirdLogin= str.toString();
-                thirdLogin=thirdLogin.substring(0,thirdLogin.length()-1);
-                thirdLogin+="}";
-                Gson gson=new Gson();
-                if(SHARE_MEDIA.WEIXIN==share_media){
-                    WeiXinLoginEntity weiXinLoginEntity=gson.fromJson(thirdLogin,WeiXinLoginEntity.class);
-                    FileManagement.setWXLogin(weiXinLoginEntity);
-                    thirdToTelBind("0");
-                }else if(SHARE_MEDIA.QQ==share_media){
-                    QQLoginEntity qqLoginEntity=gson.fromJson(thirdLogin,QQLoginEntity.class);
-                    FileManagement.setQQLogin(qqLoginEntity);
-                    thirdToTelBind("1");
-                }
-            }
-
-            @Override
-            public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                Log.d("LoginActivity", "onError 授权错误");
-                stopProgressDialog();
-            }
-
-            @Override
-            public void onCancel(SHARE_MEDIA share_media, int i) {
-                Log.d("LoginActivity", share_media.toString()+" onCancel 授权取消");
-                stopProgressDialog();
-            }
-        });
-    }
-
-    private void thirdToTelBind(String type){
-        final Map<String,String> requestMap=new HashMap<>();
-        requestMap.put("type",type);
-        requestMap.put("phoneNo",FileManagement.getLoginUserEntity().getMobileNumber());
-        if(type.equals("0")){
-            WeiXinLoginEntity loginEntity=FileManagement.getWXLogin();
-            requestMap.put("nickname",loginEntity.getName());
-            requestMap.put("accountId",loginEntity.getUid());
-            requestMap.put("sex",loginEntity.getGender().endsWith("男")?"0":"1");
-            requestMap.put("faceImg",loginEntity.getIconurl());
-        }else{
-            QQLoginEntity loginEntity=FileManagement.getQQLogin();
-            requestMap.put("nickname",loginEntity.getName());
-            requestMap.put("accountId",loginEntity.getUid());
-            requestMap.put("sex",loginEntity.getGender().endsWith("男")?"0":"1");
-            requestMap.put("faceImg",loginEntity.getIconurl());
-        }
-        XUtils.Get(Constants.HOST+"/linkThirdPartyAccount.action",requestMap,new MyCallBack<String>(){
-            @Override
-            public void onSuccess(String result) {
-                super.onSuccess(result);
-                Log.e("result",result);
-                try {
-                    JSONObject jsonObject=new JSONObject(result);
-                    if(jsonObject.get("resultCode").equals("0")){
-                        updateOwner();
-                    }else{
-                        showShortToast(jsonObject.getString("msg"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                super.onError(ex, isOnCallback);
-                showShortToast(ex.getMessage());
-            }
-
-            @Override
-            public void onFinished() {
-                super.onFinished();
-                stopProgressDialog();
-            }
-        });
-    }
-
-    private void thirdUnToTelBind(String type) {
-        Map<String, String> requestMap = new HashMap<>();
-        requestMap.put("type", type);
-        if (type.equals("0")) {
-            WeiXinLoginEntity loginEntity = FileManagement.getWXLogin();
-            requestMap.put("accountId", loginEntity.getUid());
-        } else {
-            QQLoginEntity loginEntity = FileManagement.getQQLogin();
-            requestMap.put("accountId", loginEntity.getUid());
-        }
-        XUtils.Get(Constants.HOST + "/deleteThirdPartyAccount.action", requestMap, new MyCallBack<String>() {
-            @Override
-            public void onSuccess(String result) {
-                super.onSuccess(result);
-                Log.e("result",result);
-                updateOwner();
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                super.onError(ex, isOnCallback);
-                showShortToast(ex.getMessage());
-            }
-
-            @Override
-            public void onFinished() {
-                super.onFinished();
-                stopProgressDialog();
-            }
-        });
-    }
-    /**
-     * 更新用户信息
-     */
-    private void updateOwner(){
-        ApiHttpResult.platCheckOwner(this, new String[]{"mobileNumber"},
-                new Object[]{FileManagement.getLoginUserEntity().getMobileNumber()}, new HttpUtils.DataCallBack<Object>() {
-                    @Override
-                    public void callBack(Object o) {
-                        if (o != null) {
-                            LoginResultDataEntity resultData = (LoginResultDataEntity) o;
-                            if (resultData != null) {
-                                OverallSituationEntity osEntity = resultData.getOsEntity();
-                                if (osEntity.getResultCode().equals("0")) {
-                                    LoginUserEntity userInfo = resultData.getUserInfo();
-                                    if (userInfo != null) {
-                                        FileManagement.setBaseUser(userInfo);
-                                        FileManagement.saveRoomInfo(resultData.getRoominfo());
-                                        FileManagement.setDeviceInfo(resultData.getDeviceInfo());
-                                        FileManagement.setThirdInfo(resultData.getThirdInfo());
-                                    }
-                                }
-                            }
-                        } else {
-                            NetUtil.toNetworkSetting(PersonalInformationActivity.this);
-                        }
-                        initDialogView();
-                    }
-                });
-    }
-
     //上传照片
     private void uploadPic(String path){
         Map<String,String> requestMap=new HashMap<>();
-        requestMap.put("resourceKey",resourceKey);
         Map<String,File> fileMap=new HashMap<>();
         fileMap.put("UploadFile",new File(path));
         XUtils.UpLoadFile(BASE_URL+FILE+"files-anon", requestMap,fileMap,new MyCallBack<String>(){
@@ -750,9 +383,17 @@ public class PersonalInformationActivity extends BaseActivity {
             public void onSuccess(String result) {
                 super.onSuccess(result);
                 LogUtils.d(result);
-                Map<String,Object> map=new HashMap<>();
-                map.put("resourceKey",resourceKey);
-                editPersonalInfo(map);
+                LogUtils.d(result);
+                BaseEntity<FileEntity> baseEntity= JsonParse.parse(result,FileEntity.class);
+                if(baseEntity.isSuccess()){
+                    Map<String,Object> map=new HashMap<>();
+                    map.put("avatarId",baseEntity.getResult().getId());
+                    editPersonalInfo(map);
+                }else{
+                    showToast(baseEntity.getMessage());
+                }
+
+
             }
 
             @Override
@@ -763,8 +404,8 @@ public class PersonalInformationActivity extends BaseActivity {
         });
     }
 
-    public interface OnEditSuccessLisener{
-        void onEditSuccess(PersonalInfomation personalInfomation);
+    public interface OnEditSuccessListener{
+        void onEditSuccess();
     }
 
     @Override

@@ -9,29 +9,27 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.andview.refreshview.utils.LogUtils;
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.gson.reflect.TypeToken;
 import com.xiandao.android.R;
 import com.xiandao.android.adapter.smart.OtherRoomListAdapter;
-import com.xiandao.android.adapter.smart.RoomHouseholdListAdapter;
+import com.xiandao.android.entity.eventbus.EventBusMessage;
 import com.xiandao.android.entity.smart.BaseEntity;
 import com.xiandao.android.entity.smart.CurrentDistrictEntity;
 import com.xiandao.android.entity.smart.HouseholdRoomEntity;
-import com.xiandao.android.entity.smart.OrderStatusEntity;
-import com.xiandao.android.entity.smart.RoomEntity;
-import com.xiandao.android.entity.smart.RoomHouseholdEntity;
 import com.xiandao.android.entity.smart.UserInfoEntity;
 import com.xiandao.android.http.JsonParse;
 import com.xiandao.android.http.MyCallBack;
 import com.xiandao.android.http.XUtils;
 import com.xiandao.android.ui.BaseFragment;
-import com.xiandao.android.ui.HouseholdFaceActivity;
 import com.xiandao.android.ui.activity.OtherRoomDetailActivity;
 import com.xiandao.android.utils.FileManagement;
 import com.xiandao.android.view.RecyclerViewDivider;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.ViewInject;
 
@@ -62,6 +60,7 @@ public class OtherRoomFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         context=getActivity();
         getRoomData();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -89,10 +88,16 @@ public class OtherRoomFragment extends BaseFragment {
         if(householdRoomEntities!=null&&householdRoomEntities.size()>0){
             for (int i = 0; i < householdRoomEntities.size(); i++) {
                 HouseholdRoomEntity householdRoomEntity=householdRoomEntities.get(i);
-                if(!currentDistrictEntity.getRoomId().equals(householdRoomEntity.getId())){
+                if(!TextUtils.isEmpty(currentDistrictEntity.getRoomId())){
+                    if(!TextUtils.isEmpty(currentDistrictEntity.getRoomId())&&!currentDistrictEntity.getRoomId().equals(householdRoomEntity.getId())){
+                        householdRoomEntity.setApprovalStatus(2);
+                        data.add(householdRoomEntity);
+                    }
+                }else{
                     householdRoomEntity.setApprovalStatus(2);
                     data.add(householdRoomEntity);
                 }
+
             }
             adapter.notifyDataSetChanged();
         }
@@ -126,4 +131,16 @@ public class OtherRoomFragment extends BaseFragment {
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventBusMessage message){
+        if("householdAudit".equals(message.getMessage())){
+            getRoomData();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

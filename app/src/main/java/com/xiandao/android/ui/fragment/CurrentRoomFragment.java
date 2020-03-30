@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.andview.refreshview.utils.LogUtils;
@@ -17,19 +18,18 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.xiandao.android.R;
 import com.xiandao.android.adapter.smart.RoomHouseholdListAdapter;
 import com.xiandao.android.entity.smart.BaseEntity;
-import com.xiandao.android.entity.smart.ListLoadingType;
+import com.xiandao.android.entity.smart.CurrentDistrictEntity;
 import com.xiandao.android.entity.smart.RoomEntity;
 import com.xiandao.android.entity.smart.RoomHouseholdEntity;
-import com.xiandao.android.entity.smart.VisitorListEntity;
+import com.xiandao.android.entity.smart.UserInfoEntity;
 import com.xiandao.android.http.JsonParse;
 import com.xiandao.android.http.MyCallBack;
 import com.xiandao.android.http.XUtils;
 import com.xiandao.android.ui.BaseFragment;
-import com.xiandao.android.ui.HouseholdFaceActivity;
-import com.xiandao.android.ui.activity.RepairsDetailActivity;
+import com.xiandao.android.ui.activity.HouseholdFaceActivity;
+import com.xiandao.android.ui.activity.UnitSelectActivity;
 import com.xiandao.android.utils.FileManagement;
 import com.xiandao.android.view.RecyclerViewDivider;
-import com.xiandao.android.view.decoration.SimpleDividerItemDecoration;
 
 import org.xutils.event.annotation.ContentView;
 import org.xutils.event.annotation.Event;
@@ -54,7 +54,21 @@ public class CurrentRoomFragment extends BaseFragment {
     private TextView current_room_room_name;
     @ViewInject(R.id.current_room_room_code)
     private TextView current_room_room_code;
+    @ViewInject(R.id.current_room_project_line)
+    private TextView current_room_project_line;
+    @ViewInject(R.id.current_room_project_ll)
+    private LinearLayout current_room_project_ll;
 
+
+    @ViewInject(R.id.current_room_ll_add)
+    private LinearLayout current_room_ll_add;
+    @ViewInject(R.id.current_room_avatar)
+    private ImageView current_room_avatar;
+    @ViewInject(R.id.current_room_nick_name)
+    private TextView current_room_nick_name;
+
+    @ViewInject(R.id.current_room_ll_show)
+    private LinearLayout current_room_ll_show;
     @ViewInject(R.id.current_room_user_avatar)
     private ImageView current_room_user_avatar;
     @ViewInject(R.id.current_room_user_name)
@@ -64,36 +78,55 @@ public class CurrentRoomFragment extends BaseFragment {
     @ViewInject(R.id.current_room_rv_other)
     private RecyclerView current_room_rv_other;
 
+
+
     private Activity context;
     private RoomHouseholdListAdapter adapter;
     private List<RoomHouseholdEntity> data=new ArrayList<>();
     private RoomHouseholdEntity currentHousehold;
     private RoomEntity roomEntity;
+    private UserInfoEntity userInfo;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=getActivity();
-        getRoomData();
+        userInfo=FileManagement.getUserInfoEntity();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter=new RoomHouseholdListAdapter(context,data);
-        current_room_rv_other.setLayoutManager(new LinearLayoutManager(context));
-        current_room_rv_other.addItemDecoration(new RecyclerViewDivider(context, LinearLayoutManager.VERTICAL));
-        current_room_rv_other.setAdapter(adapter);
-        current_room_rv_other.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("household",data.get(position));
-                bundle.putBoolean("edit",false);
-                openActivity(HouseholdFaceActivity.class,bundle);
+        CurrentDistrictEntity currentDistrictEntity = userInfo.getCurrentDistrict();
+        if(!TextUtils.isEmpty(currentDistrictEntity.getRoomId())){
+            getRoomData();
+            current_room_ll_show.setVisibility(View.VISIBLE);
+            adapter=new RoomHouseholdListAdapter(context,data);
+            current_room_rv_other.setLayoutManager(new LinearLayoutManager(context));
+            current_room_rv_other.addItemDecoration(new RecyclerViewDivider(context, LinearLayoutManager.VERTICAL));
+            current_room_rv_other.setAdapter(adapter);
+            current_room_rv_other.addOnItemTouchListener(new OnItemClickListener() {
+                @Override
+                public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("household",data.get(position));
+                    bundle.putBoolean("edit",false);
+                    openActivity(HouseholdFaceActivity.class,bundle);
+                }
+            });
+        }else{
+            current_room_project_line.setVisibility(View.GONE);
+            current_room_project_ll.setVisibility(View.GONE);
+            current_room_ll_add.setVisibility(View.VISIBLE);
+            if(userInfo.getAvatarResource()!=null){
+                Glide.with(context)
+                        .load(userInfo.getAvatarResource().getUrl())
+                        .error(R.drawable.ic_default_img)
+                        .circleCrop()
+                        .into(current_room_avatar);
             }
-        });
-
+            current_room_nick_name.setText(TextUtils.isEmpty(userInfo.getNickName())?userInfo.getName():userInfo.getNickName());
+        }
     }
 
     private void getRoomData(){
@@ -156,7 +189,7 @@ public class CurrentRoomFragment extends BaseFragment {
         current_room_user_type.setText(currentHousehold.getHouseholdTypeDisplay());
     }
 
-    @Event({R.id.current_room_ll})
+    @Event({R.id.current_room_ll,R.id.current_room_btn_add})
     private void onClickEvent(View v){
         switch (v.getId()){
             case R.id.current_room_ll:
@@ -164,6 +197,9 @@ public class CurrentRoomFragment extends BaseFragment {
                 bundle.putSerializable("household",currentHousehold);
                 bundle.putBoolean("edit",true);
                 openActivity(HouseholdFaceActivity.class,bundle);
+                break;
+            case R.id.current_room_btn_add:
+                openActivity(UnitSelectActivity.class);
                 break;
         }
     }

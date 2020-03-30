@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.xiandao.android.R;
 import com.xiandao.android.entity.smart.ApprovalStatusType;
+import com.xiandao.android.entity.smart.AuditEntity;
 import com.xiandao.android.entity.smart.HouseholdRoomEntity;
+import com.xiandao.android.view.BaseSwipListAdapter;
 
 import java.util.List;
 
@@ -18,13 +20,21 @@ import java.util.List;
  * Version: 1.0
  * Describe:
  */
-public class HouseManageAdapter extends BaseAdapter {
+public class HouseManageAdapter extends BaseSwipListAdapter {
     private Context context;
     private List<HouseholdRoomEntity> data;
+    private boolean showLine;
 
     public HouseManageAdapter(Context context, List<HouseholdRoomEntity> data) {
         this.context = context;
         this.data = data;
+        this.showLine=true;
+    }
+
+    public HouseManageAdapter(Context context, List<HouseholdRoomEntity> data, boolean showLine) {
+        this.context = context;
+        this.data = data;
+        this.showLine = showLine;
     }
 
     @Override
@@ -51,6 +61,7 @@ public class HouseManageAdapter extends BaseAdapter {
             holder.project_name=convertView.findViewById(R.id.item_project_name);
             holder.room_name=convertView.findViewById(R.id.item_room_name);
             holder.room_status=convertView.findViewById(R.id.item_room_status);
+            holder.room_list_line=convertView.findViewById(R.id.room_list_line);
             convertView.setTag(holder);
         }else{
             holder= (HouseManageHolder) convertView.getTag();
@@ -68,6 +79,11 @@ public class HouseManageAdapter extends BaseAdapter {
             holder.room_status.setText(householdRoomEntity.getHouseholdTypeDisplay());
             holder.room_status.setBackgroundResource(R.drawable.bg_green_shape);
         }
+        if(showLine){
+            holder.room_list_line.setVisibility(View.VISIBLE);
+        }else{
+            holder.room_list_line.setVisibility(View.INVISIBLE);
+        }
         return convertView;
     }
 
@@ -76,5 +92,16 @@ public class HouseManageAdapter extends BaseAdapter {
         TextView room_status;//状态
         TextView project_name;//项目名称
         TextView room_name;//房间名称
+        TextView room_list_line;
+    }
+
+    @Override
+    public boolean getSwipEnableByPosition(int position) {
+        HouseholdRoomEntity householdRoomEntity=data.get(position);
+        if(householdRoomEntity.getApprovalStatus()== ApprovalStatusType.Audit.getType()){
+            return true;
+        }
+        return false;
+
     }
 }
